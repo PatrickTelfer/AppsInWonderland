@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { FullWidthContainer, Container } from "../Common/Container";
 import styled from "styled-components";
 import PlayerList from "./PlayerList";
@@ -8,9 +8,20 @@ import { withRouter } from "react-router";
 import { Title, SubTitle } from "../Common/Text";
 
 const Lobby = (props) => {
-  const testData = ["bob", "joe", "kanye", "test", "travis", "dominoes pizza"];
+  const [players, setPlayers] = useState([]);
   const serverData = props.location.state;
   const serverCode = serverData.serverCode;
+
+  useEffect(() => {
+    const getData = async () => {
+      const res = await fetch("/api/lobby/" + serverCode);
+      const json = await res.json();
+      setPlayers(json.players);
+    };
+    getData();
+    console.log("hello");
+  }, [serverCode]);
+
   return (
     <FullWidthContainer>
       <LobbyContainer>
@@ -19,8 +30,8 @@ const Lobby = (props) => {
           🔥 Join with Code
           <span style={{ color: "red" }}> {serverCode} </span>🔥
         </Code>
-        <PlayerList players={testData} />
-        <SubTitle>Player Count: {testData.length}</SubTitle>
+        <PlayerList players={players} />
+        <SubTitle>Player Count: {players.length}</SubTitle>
 
         <Button style={{ marginTop: "auto" }}>Start</Button>
       </LobbyContainer>
