@@ -3,8 +3,10 @@ import Home from "./Home/Home";
 import Lobby from "./Lobby/Lobby";
 import PromptInput from "./PromptInput/PromptInput";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import useSocket from "./Hooks/useSocket";
 
 function App() {
+  useSocket();
   return (
     <Router>
       <Switch>
