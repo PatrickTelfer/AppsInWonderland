@@ -6,8 +6,14 @@ import { Input } from "../Common/Input";
 import { Title } from "../Common/Text";
 import styled from "styled-components";
 
-const handleCreateClick = async (setError) => {
-  const res = await fetch("/api/lobby", { method: "POST" });
+const handleCreateClick = async (name) => {
+  const res = await fetch("/api/lobby", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ name: name }),
+  });
   const json = await res.json();
 
   return json;
@@ -41,7 +47,7 @@ const Home = () => {
             <Button disabled={code === ""}>JOIN</Button>
             <CreateButton
               onClick={async () => {
-                const lobbyData = await handleCreateClick(setError);
+                const lobbyData = await handleCreateClick(name);
                 console.log(lobbyData);
                 if (!error) {
                   history.push({
