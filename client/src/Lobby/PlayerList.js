@@ -20,6 +20,7 @@ const List = styled.ol`
   max-width: 90%;
   background-color: #f0f0f0;
   box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
+  min-height: 30%;
 `;
 
 const ListItem = styled.li`

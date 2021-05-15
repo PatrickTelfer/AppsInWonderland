@@ -4,28 +4,24 @@ import styled from "styled-components";
 import PlayerList from "./PlayerList";
 import { Button } from "../Common/Button";
 import Canvas from "../Canvas/Canvas";
+import { withRouter } from "react-router";
+import { Title, SubTitle } from "../Common/Text";
 
-const Lobby = () => {
-  const testData = [
-    "one (temp data)",
-    "two",
-    "three",
-    "one",
-    "two",
-    "three",
-    "one",
-    "two",
-    "three",
-    "one",
-    "two",
-    "three",
-  ];
+const Lobby = (props) => {
+  const testData = ["one (temp data)"];
+  const serverData = props.location.state;
+  const serverCode = serverData.serverCode;
   return (
     <FullWidthContainer>
       <LobbyContainer>
         <Title>WELCOME TO THE LOBBY</Title>
-        <SubTitle>🔥 There are {testData.length} players here 🔥</SubTitle>
+        <Code>
+          🔥 Join with Code
+          <span style={{ color: "red" }}> {serverCode} </span>🔥
+        </Code>
         <PlayerList players={testData} />
+        <SubTitle>Player Count: {testData.length}</SubTitle>
+
         <Button style={{ marginTop: "auto" }}>Start</Button>
       </LobbyContainer>
       <DrawingContainer>
@@ -36,8 +32,12 @@ const Lobby = () => {
   );
 };
 
+const Code = styled(SubTitle)`
+  outline: red;
+  font-size: 1.25em;
+`;
+
 const LobbyContainer = styled(Container)`
-  margin: 20px;
   max-width: 500px;
 `;
 
@@ -47,19 +47,4 @@ const DrawingContainer = styled(Container)`
   justify-content: center;
 `;
 
-const Title = styled.h2`
-  text-align: center;
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
-  color: #47d1c2;
-  margin-bottom: 0.5em;
-`;
-
-const SubTitle = styled.h4`
-  text-align: center;
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
-  color: #71f0e1;
-  margin-bottom: 0.5em;
-  margin-top: 0;
-`;
-
-export default Lobby;
+export default withRouter(Lobby);
