@@ -24,7 +24,7 @@ export const Button = styled.button`
     border-color: rgba(164, 53, 194, 0.2);
     cursor: default;
   }
-  width: 50%;
+  width: 30%;
   @media (max-width: 768px) {
     font-size: 1em;
     padding: 5px 5px;

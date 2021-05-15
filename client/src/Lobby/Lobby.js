@@ -8,7 +8,7 @@ import { withRouter } from "react-router";
 import { Title, SubTitle } from "../Common/Text";
 
 const Lobby = (props) => {
-  const testData = ["one (temp data)"];
+  const testData = ["bob", "joe", "kanye", "test", "travis", "dominoes pizza"];
   const serverData = props.location.state;
   const serverCode = serverData.serverCode;
   return (

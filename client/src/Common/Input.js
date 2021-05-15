@@ -9,7 +9,7 @@ export const Input = styled.input`
   color: rgba(164, 53, 170, 0.8);
   font-size: 1.5em;
   transition: all 0.15s;
-  margin: 0 0.3em 1.2em 0;
+  margin-bottom: 1.2em;
   text-align: center;
   &:hover {
     color: rgba(164, 53, 194, 0.6);
@@ -25,7 +25,7 @@ export const Input = styled.input`
   &::placeholder {
     color: rgba(164, 53, 170, 0.8);
   }
-  width: 45%;
+  width: 50%;
   @media (max-width: 768px) {
     font-size: 1em;
     padding: 5px 5px;
