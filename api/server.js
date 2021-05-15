@@ -11,6 +11,9 @@ const io = require("socket.io")(server, {
 
 io.on("connection", (socket) => {
   console.log("hi");
+  socket.on("join", (code) => {
+    console.log("joined");
+  });
 });
 
 module.exports = server;

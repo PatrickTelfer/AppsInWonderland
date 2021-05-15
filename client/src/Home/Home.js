@@ -5,6 +5,7 @@ import { Button } from "../Common/Button";
 import { Input } from "../Common/Input";
 import { Title } from "../Common/Text";
 import styled from "styled-components";
+import useSocket from "../Hooks/useSocket";
 
 const handleCreateClick = async (name) => {
   const res = await fetch("/api/lobby", {
@@ -19,11 +20,12 @@ const handleCreateClick = async (name) => {
   return json;
 };
 
-const Home = () => {
+const Home = ({ socket }) => {
   const [code, setCode] = useState("");
   const [error, setError] = useState(null);
   const [name, setName] = useState(null);
-
+  console.log(socket);
+  const { joinRoom } = useSocket(socket);
   const history = useHistory();
   return (
     <FullWidthContainer>
@@ -44,7 +46,14 @@ const Home = () => {
               }}
             ></Input>
 
-            <Button disabled={code === ""}>JOIN</Button>
+            <Button
+              disabled={code === ""}
+              onClick={() => {
+                joinRoom();
+              }}
+            >
+              JOIN
+            </Button>
             <CreateButton
               onClick={async () => {
                 const lobbyData = await handleCreateClick(name);

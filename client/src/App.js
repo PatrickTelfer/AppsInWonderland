@@ -3,21 +3,26 @@ import Home from "./Home/Home";
 import Lobby from "./Lobby/Lobby";
 import PromptInput from "./PromptInput/PromptInput";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import useSocket from "./Hooks/useSocket";
+import React, { useEffect, useRef } from "react";
+import { io } from "socket.io-client";
 
 function App() {
-  useSocket();
+  const socketRef = useRef();
+  useEffect(() => {
+    socketRef.current = io("http://localhost:3000");
+  }, []);
+
   return (
     <Router>
       <Switch>
         <Route path="/Prompt">
-          <PromptInput />
+          <PromptInput socket={socketRef.current} />
         </Route>
         <Route path="/Lobby">
-          <Lobby />
+          <Lobby socket={socketRef.current} />
         </Route>
         <Route path="/">
-          <Home />
+          <Home socket={socketRef.current} />
         </Route>
       </Switch>
     </Router>

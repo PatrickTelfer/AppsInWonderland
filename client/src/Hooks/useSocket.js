@@ -1,12 +1,11 @@
-import { useEffect } from "react";
-import { io } from "socket.io-client";
+const useSocket = (socket) => {
+  console.log(socket);
+  console.log(socket);
+  const joinRoom = (code) => {
+    socket.emit("join", code);
+  };
 
-const useSocket = () => {
-  useEffect(() => {
-    const socket = io("http://localhost:3000");
-  }, []);
-
-  return {};
+  return { joinRoom };
 };
 
 export default useSocket;
