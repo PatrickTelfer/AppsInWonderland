@@ -3,7 +3,6 @@ import styled from "styled-components";
 
 const PlayerList = (props) => {
   const players = props.players;
-  console.log(players);
   return (
     <List>
       {players.map((value, index) => {

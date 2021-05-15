@@ -25,4 +25,9 @@ export const Button = styled.button`
     cursor: default;
   }
   width: 50%;
+  @media (max-width: 768px) {
+    font-size: 1em;
+    padding: 5px 5px;
+    width: 80%;
+  }
 `;

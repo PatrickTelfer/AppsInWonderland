@@ -3,10 +3,11 @@ import { FullWidthContainer, Container } from "../Common/Container";
 import styled from "styled-components";
 import PlayerList from "./PlayerList";
 import { Button } from "../Common/Button";
+import Canvas from "../Canvas/Canvas";
 
 const Lobby = () => {
   const testData = [
-    "one",
+    "one (temp data)",
     "two",
     "three",
     "one",
@@ -27,9 +28,10 @@ const Lobby = () => {
         <PlayerList players={testData} />
         <Button style={{ marginTop: "auto" }}>Start</Button>
       </LobbyContainer>
-      <LobbyContainer>
-        <p>test</p>
-      </LobbyContainer>
+      <DrawingContainer>
+        <Canvas />
+        <Button>Clear</Button>
+      </DrawingContainer>
     </FullWidthContainer>
   );
 };
@@ -37,6 +39,12 @@ const Lobby = () => {
 const LobbyContainer = styled(Container)`
   margin: 20px;
   max-width: 500px;
+`;
+
+const DrawingContainer = styled(Container)`
+  margin: 20px;
+  max-width: 500px;
+  justify-content: center;
 `;
 
 const Title = styled.h2`
