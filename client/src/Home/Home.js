@@ -5,9 +5,8 @@ import { Button } from "../Common/Button";
 import { Input } from "../Common/Input";
 import { Title } from "../Common/Text";
 import styled from "styled-components";
-import useSocket from "../Hooks/useSocket";
 
-const handleCreateClick = async (name) => {
+const handleCreateClick = async (name, setError) => {
   const res = await fetch("/api/lobby", {
     method: "POST",
     headers: {
@@ -15,17 +14,30 @@ const handleCreateClick = async (name) => {
     },
     body: JSON.stringify({ name: name }),
   });
+  setError(null);
   const json = await res.json();
 
   return json;
+};
+
+const handleJoinClick = async (code, setError) => {
+  const res = await fetch("/api/lobby/" + code);
+  console.log(res.status);
+  if (res.status === 404) {
+    setError("This room does not exist");
+
+    return null;
+  } else {
+    const json = await res.json();
+    setError("");
+    return json;
+  }
 };
 
 const Home = ({ socket }) => {
   const [code, setCode] = useState("");
   const [error, setError] = useState(null);
   const [name, setName] = useState(null);
-  console.log(socket);
-  const { joinRoom } = useSocket(socket);
   const history = useHistory();
   return (
     <FullWidthContainer>
@@ -45,23 +57,30 @@ const Home = ({ socket }) => {
                 setCode(event.target.value);
               }}
             ></Input>
+            {error !== "" && <ErrorText>{error}</ErrorText>}
 
             <Button
               disabled={code === ""}
-              onClick={() => {
-                joinRoom();
+              onClick={async () => {
+                const lobbyData = await handleJoinClick(code, setError);
+                console.log(lobbyData);
+                if (lobbyData !== null) {
+                  history.push({
+                    pathname: "Lobby/" + lobbyData.code,
+                    state: { ...lobbyData, name },
+                  });
+                }
               }}
             >
               JOIN
             </Button>
             <CreateButton
               onClick={async () => {
-                const lobbyData = await handleCreateClick(name);
-                console.log(lobbyData);
+                const lobbyData = await handleCreateClick(name, setError);
                 if (!error) {
                   history.push({
-                    pathname: "Lobby",
-                    state: lobbyData,
+                    pathname: "Lobby/" + lobbyData.code,
+                    state: { ...lobbyData, name },
                   });
                 }
               }}
@@ -79,5 +98,9 @@ const CreateButton = styled(Button)`
   margin-top: auto;
   border: 2px solid rgb(84, 177, 184);
   color: rgb(84, 177, 184);
+`;
+
+const ErrorText = styled.p`
+  color: red;
 `;
 export default Home;

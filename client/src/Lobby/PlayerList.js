@@ -5,9 +5,10 @@ const PlayerList = (props) => {
   const players = props.players;
   return (
     <List>
-      {players.map((value, index) => {
-        return <ListItem key={index}>{value}</ListItem>;
-      })}
+      {players &&
+        players.map((value, index) => {
+          return <ListItem key={index}>{value}</ListItem>;
+        })}
     </List>
   );
 };

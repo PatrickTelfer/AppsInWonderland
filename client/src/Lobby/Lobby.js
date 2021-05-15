@@ -4,23 +4,35 @@ import styled from "styled-components";
 import PlayerList from "./PlayerList";
 import { Button } from "../Common/Button";
 import Canvas from "../Canvas/Canvas";
-import { withRouter } from "react-router";
+import { useParams, withRouter } from "react-router";
 import { Title, SubTitle } from "../Common/Text";
+import useSocket from "../Hooks/useSocket";
 
 const Lobby = (props) => {
-  const [players, setPlayers] = useState([]);
+  const [joined, setJoined] = useState(false);
   const serverData = props.location.state;
-  const serverCode = serverData.serverCode;
+  const socket = props.socket;
+  const serverCode = serverData.code;
+  const name = serverData.name;
+  const { joinRoom, players } = useSocket(socket);
+
+  // useEffect(() => {
+  //   const getData = async () => {
+  //     const res = await fetch("/api/lobby/" + serverCode);
+  //     const json = await res.json();
+  //     setPlayers(json.players);
+  //   };
+  //   getData();
+  // }, [serverCode]);
+
+  const { id } = useParams();
 
   useEffect(() => {
-    const getData = async () => {
-      const res = await fetch("/api/lobby/" + serverCode);
-      const json = await res.json();
-      setPlayers(json.players);
-    };
-    getData();
-    console.log("hello");
-  }, [serverCode]);
+    if (socket && !joined) {
+      joinRoom(id, name);
+      setJoined(true);
+    }
+  }, [id, joinRoom, socket, joined, name]);
 
   return (
     <FullWidthContainer>
@@ -31,7 +43,7 @@ const Lobby = (props) => {
           <span style={{ color: "red" }}> {serverCode} </span>🔥
         </Code>
         <PlayerList players={players} />
-        <SubTitle>Player Count: {players.length}</SubTitle>
+        <SubTitle>Player Count: {players && players.length}</SubTitle>
 
         <Button style={{ marginTop: "auto" }}>Start</Button>
       </LobbyContainer>

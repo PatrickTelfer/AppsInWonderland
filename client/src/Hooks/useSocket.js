@@ -1,11 +1,19 @@
+import { useEffect, useState } from "react";
+
 const useSocket = (socket) => {
-  console.log(socket);
-  console.log(socket);
-  const joinRoom = (code) => {
-    socket.emit("join", code);
+  const [players, setPlayers] = useState([]);
+  useEffect(() => {
+    if (socket) {
+      socket.on("playerJoined", (players) => {
+        setPlayers(players);
+      });
+    }
+  }, []);
+  const joinRoom = (code, name) => {
+    socket.emit("join", { code, name });
   };
 
-  return { joinRoom };
+  return { joinRoom, players };
 };
 
 export default useSocket;

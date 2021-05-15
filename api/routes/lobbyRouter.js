@@ -8,16 +8,21 @@ router.post("/", function (req, res, next) {
   const hostName = req.body.name;
   const code = LobbyService.createLobby(hostName);
   const server = ServerService.getServer();
-  res.json({ serverCode: code });
+  res.json({ code: code });
 });
 
 // Get a lobby
 router.get("/:id", function (req, res, next) {
-  console.log("*******");
   const id = req.params.id;
+  if (id === undefined) {
+    res.status(404);
+  }
   const lobby = LobbyService.getLobbyById(id);
-  console.log("heree: ", lobby);
-  res.json(lobby);
+  if (lobby === null) {
+    res.status(404).json({});
+  } else {
+    res.status(200).json(lobby);
+  }
 });
 
 module.exports = router;
