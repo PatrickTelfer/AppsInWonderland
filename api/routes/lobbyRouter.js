@@ -4,10 +4,10 @@ var LobbyService = require("../services/lobbyService");
 var ServerService = require("../services/serverService");
 
 router.post("/", function (req, res, next) {
-  LobbyService.createLobby();
+  const code = LobbyService.createLobby();
   const server = ServerService.getServer();
   console.log(server);
-  res.send("200");
+  res.json({ serverCode: code });
 });
 
 router.get("/", function (req, res, next) {

@@ -11,6 +11,7 @@ LobbyService.createLobby = () => {
   const server = ServerService.getServer();
   server.lobbys.push(lobby);
   server.lobbyCount++;
+  return randomCode;
 };
 
 module.exports = LobbyService;
