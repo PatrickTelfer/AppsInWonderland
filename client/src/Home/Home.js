@@ -95,7 +95,6 @@ const Home = ({ socket }) => {
 };
 
 const CreateButton = styled(Button)`
-  margin-top: auto;
   border: 2px solid rgb(84, 177, 184);
   color: rgb(84, 177, 184);
 `;

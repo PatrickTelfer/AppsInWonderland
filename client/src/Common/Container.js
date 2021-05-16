@@ -14,7 +14,7 @@ export const Container = styled.div`
   height: 80%;
   @media (max-width: 768px) {
     width: 100%;
-    height: 80%;
+    height: 90%;
   }
   background-color: white;
   border: 4px solid rgba(164, 53, 194, 0.4);
