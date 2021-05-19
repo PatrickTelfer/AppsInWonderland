@@ -4,7 +4,7 @@ import { Container, FullWidthContainer } from "../Common/Container";
 import { Input } from "../Common/Input";
 import { Title } from "../Common/Text";
 import { Button } from "../Common/Button";
-import thinking from "../Ressources/thinking.gif";
+import thinking from "../../Ressources/thinking.gif";
 
 const PromptInput = () => {
   return (

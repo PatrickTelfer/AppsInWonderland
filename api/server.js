@@ -14,9 +14,10 @@ const io = require("socket.io")(server, {
 io.on("connection", (socket) => {
   let playerName = "";
   let playerRoom = "";
-
+  console.log("socket connected");
   socket.on("join", (data) => {
-    const { code, name } = data;
+    const code = data.serverCode;
+    const name = data.name;
     console.log("JOIN: ", code, name);
     playerName = name;
     playerRoom = code;
