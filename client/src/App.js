@@ -11,7 +11,7 @@ function App() {
     <SocketContext.Provider value={socket}>
       <Router>
         <Switch>
-          <Route path="/Prompt">
+          <Route path="/Prompt/:id">
             <PromptInput />
           </Route>
           <Route path="/Lobby/:id">

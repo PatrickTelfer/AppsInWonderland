@@ -28,6 +28,11 @@ io.on("connection", (socket) => {
     }
   });
 
+  socket.on("start", () => {
+    console.log("STARTING GAME", playerRoom);
+    io.to(playerRoom).emit("hostStartedGame");
+  });
+
   socket.on("disconnect", () => {
     console.log("DISCONNECT ", playerName, playerRoom);
     const lobby = LobbyService.removePlayerFromRoom(playerRoom, playerName);

@@ -4,7 +4,7 @@ import styled from "styled-components";
 import PlayerList from "./PlayerList";
 import { Button } from "../Common/Button";
 import Canvas from "../Canvas/Canvas";
-import { useParams, withRouter } from "react-router";
+import { useHistory, withRouter } from "react-router";
 import { Title, SubTitle } from "../Common/Text";
 import { SocketContext } from "../../Context/socket";
 
@@ -14,8 +14,10 @@ const Lobby = (props) => {
   // const socket = props.socket;
   const serverCode = serverData.code;
   const name = serverData.name;
+  const isHost = serverData.isHost;
   const socket = useContext(SocketContext);
   const [players, setPlayers] = useState([]);
+  const history = useHistory();
 
   useEffect(() => {
     const getData = async () => {
@@ -34,8 +36,22 @@ const Lobby = (props) => {
       socket.on("playerJoined", (players) => {
         setPlayers(players);
       });
+
+      socket.on("hostStartedGame", () => {
+        console.log("HERE");
+        history.replace({
+          pathname: "/Prompt/" + serverData.code,
+          state: { ...serverData, name },
+        });
+      });
     }
-  }, [socket, joined, name, serverCode]);
+  }, [socket, joined, name, serverCode, history, serverData]);
+
+  const startGame = () => {
+    if (socket) {
+      socket.emit("start");
+    }
+  };
 
   return (
     <FullWidthContainer>
@@ -48,7 +64,13 @@ const Lobby = (props) => {
         <PlayerList players={players} />
         <SubTitle>Player Count: {players && players.length}</SubTitle>
 
-        <Button style={{ marginTop: "auto" }}>Start</Button>
+        <Button
+          style={{ marginTop: "auto" }}
+          disabled={!isHost}
+          onClick={startGame}
+        >
+          Start
+        </Button>
       </LobbyContainer>
       <DrawingContainer>
         <Canvas />

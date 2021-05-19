@@ -65,6 +65,7 @@ const Home = ({ socket }) => {
                 const lobbyData = await handleJoinClick(code, setError);
                 console.log(lobbyData);
                 if (lobbyData !== null) {
+                  lobbyData.isHost = false;
                   history.push({
                     pathname: "Lobby/" + lobbyData.code,
                     state: { ...lobbyData, name },
@@ -78,6 +79,7 @@ const Home = ({ socket }) => {
               onClick={async () => {
                 const lobbyData = await handleCreateClick(name, setError);
                 if (!error) {
+                  lobbyData.isHost = true;
                   history.push({
                     pathname: "Lobby/" + lobbyData.code,
                     state: { ...lobbyData, name },
