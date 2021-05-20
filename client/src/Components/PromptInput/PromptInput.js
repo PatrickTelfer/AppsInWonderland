@@ -1,12 +1,21 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import styled from "styled-components";
 import { Container, FullWidthContainer } from "../Common/Container";
 import { Input } from "../Common/Input";
 import { Title } from "../Common/Text";
 import { Button } from "../Common/Button";
 import thinking from "../../Ressources/thinking.gif";
+import { SocketContext } from "../../Context/socket";
 
 const PromptInput = () => {
+  const socket = useContext(SocketContext);
+  useEffect(() => {
+    if (socket) {
+      socket.on("timerUpdate", (second) => {
+        console.log(second);
+      });
+    }
+  }, [socket]);
   return (
     <FullWidthContainer>
       <Container>

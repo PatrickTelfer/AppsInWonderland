@@ -31,6 +31,16 @@ io.on("connection", (socket) => {
   socket.on("start", () => {
     console.log("STARTING GAME", playerRoom);
     io.to(playerRoom).emit("hostStartedGame");
+    let second = 10;
+    const intervalObj = setInterval(() => {
+      io.to(playerRoom).emit("timerUpdate", second);
+      second--;
+    }, 1000);
+
+    setTimeout(() => {
+      clearInterval(intervalObj);
+      io.to(playerRoom).emit("timerDone");
+    }, 11000);
   });
 
   socket.on("disconnect", () => {

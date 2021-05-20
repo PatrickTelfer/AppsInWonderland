@@ -6,7 +6,8 @@ export const FullWidthContainer = styled.div`
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
-  padding: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
 `;
 
 export const Container = styled.div`
