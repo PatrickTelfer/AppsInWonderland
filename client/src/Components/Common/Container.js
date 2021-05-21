@@ -8,11 +8,15 @@ export const FullWidthContainer = styled.div`
   flex-wrap: wrap;
   padding-left: 20px;
   padding-right: 20px;
+  @media (max-width: 768px) {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
 `;
 
 export const Container = styled.div`
   width: 80%;
-  height: 80%;
+  height: 90%;
   @media (max-width: 768px) {
     width: 100%;
     height: 90%;

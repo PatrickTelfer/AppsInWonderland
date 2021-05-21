@@ -93,6 +93,11 @@ const DrawingContainer = styled(Container)`
   margin: 20px;
   max-width: 500px;
   justify-content: center;
+  @media (max-width: 768px) {
+    padding: 0;
+    margin-left: 0;
+    margin-right: 0;
+  }
 `;
 
 export default withRouter(Lobby);

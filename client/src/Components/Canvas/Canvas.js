@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
+import { FaEraser, FaPencilAlt, FaTrash } from "react-icons/fa";
+import { Button } from "../Common/Button";
 
 const Canvas = () => {
   const canvasRef = useRef(null);
@@ -9,7 +11,9 @@ const Canvas = () => {
   const [currentY, setCurrentY] = useState(0);
   const [isDrawing, setIsDrawing] = useState(false);
   const [currentWidth, setCurrentWidth] = useState(0);
+  const [isDrawingToolSelected, setIsDrawingToolSelected] = useState(true);
   const threshHold = 20;
+  const [currentColor, setCurrentColor] = useState();
 
   //   useEffect(() => {
   //     const onResize = (e) => {
@@ -33,19 +37,57 @@ const Canvas = () => {
     setCtx(ctx);
     setCurrentWidth(width);
     ctx.canvas.width = width - 50;
-    ctx.canvas.height = height - 100;
+    ctx.canvas.height = height - 150;
+    setCurrentColor("#000000");
   }, [ctx]);
 
   const drawLine = function (x, y, color) {
-    ctx.fillStyle = "black";
+    ctx.strokeStyle = currentColor;
+    ctx.lineWidth = 1;
+    if (!isDrawingToolSelected) {
+      ctx.strokeStyle = "#f2f2f2";
+      ctx.lineWidth = 20;
+    }
     ctx.beginPath();
     ctx.moveTo(currentX, currentY);
     ctx.lineTo(x, y);
     ctx.closePath();
     ctx.stroke();
   };
+
+  const clearCanvas = function () {
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+  };
   return (
     <CanvasContainer ref={containerRef}>
+      <Toolbar>
+        <ColorPicker
+          type="color"
+          onChange={(e) => {
+            setCurrentColor(e.target.value);
+          }}
+        />
+        <ToolbarButton
+          disabled={!isDrawingToolSelected}
+          onClick={() => {
+            setIsDrawingToolSelected(!isDrawingToolSelected);
+          }}
+        >
+          <FaEraser />
+        </ToolbarButton>
+
+        <ToolbarButton
+          disabled={isDrawingToolSelected}
+          onClick={() => {
+            setIsDrawingToolSelected(!isDrawingToolSelected);
+          }}
+        >
+          <FaPencilAlt />
+        </ToolbarButton>
+        <TrashButton onClick={clearCanvas}>
+          <FaTrash />
+        </TrashButton>
+      </Toolbar>
       <StyledCanvas
         ref={canvasRef}
         onTouchStart={(e) => {
@@ -111,11 +153,52 @@ const CanvasContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
+  @media (max-width: 768px) {
+    padding: 0;
+  }
 `;
 
 const StyledCanvas = styled.canvas`
   background-color: #f2f2f2;
   touch-action: none;
+`;
+
+const Toolbar = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  width: 50%;
+  border: 2px solid rgba(164, 53, 170, 0.8);
+  margin-bottom: 10px;
+  margin-top: 10px;
+  @media (max-width: 768px) {
+    width: 80%;
+  }
+`;
+
+const ToolbarButton = styled(Button)`
+  width: 55px;
+  height: 55px;
+  margin: 5px;
+  cursor: pointer;
+  background-color: white;
+  padding: 0;
+  font-weight: 1em;
+`;
+
+const TrashButton = styled(ToolbarButton)`
+  &:focus {
+    border: 2px solid rgba(164, 53, 170, 0.8);
+    color: rgba(164, 53, 194, 0.8);
+  }
+`;
+
+const ColorPicker = styled.input`
+  width: 50px;
+  height: 50px;
+  margin: 5px;
+  cursor: pointer;
+  margin-right: auto;
 `;
 
 export default Canvas;
