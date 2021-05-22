@@ -2,14 +2,17 @@ import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import { Container, FullWidthContainer } from "../Common/Container";
 import { Input } from "../Common/Input";
-import { Title } from "../Common/Text";
+import { Title, SubTitle } from "../Common/Text";
 import { Button } from "../Common/Button";
 import thinking from "../../Ressources/thinking.gif";
 import { SocketContext } from "../../Context/socket";
 
 const PromptInput = () => {
   const socket = useContext(SocketContext);
-  const [second, setSecond] = useState(10);
+  const [second, setSecond] = useState(30);
+  const [submitted, setSubmitted] = useState(false);
+  const [prompt, setPrompt] = useState("");
+
   useEffect(() => {
     if (socket) {
       socket.on("timerUpdate", (second) => {
@@ -20,10 +23,34 @@ const PromptInput = () => {
   return (
     <FullWidthContainer>
       <Container>
-        <Title>Enter a drawing prompt ⏳ {second} ⏳</Title>
+        <Title>Enter a drawing prompt</Title>
         <Spinning src={thinking} alt="loading..." />
-        <StyledInput placeholder="Input a suggestion!"></StyledInput>
-        <Button>Submit</Button>
+
+        <Progress value={second} max={30} />
+        {!submitted && (
+          <>
+            <StyledInput
+              placeholder="Input a suggestion!"
+              onChange={(e) => {
+                setPrompt(e.target.value);
+              }}
+            ></StyledInput>
+            <Button
+              onClick={() => {
+                if (prompt !== "") {
+                  setSubmitted(true);
+                }
+              }}
+            >
+              Submit
+            </Button>
+          </>
+        )}
+        {submitted && (
+          <SubTitle style={{ marginTop: "auto" }}>
+            Thank your for your submission. Waiting for others to submit
+          </SubTitle>
+        )}
       </Container>
     </FullWidthContainer>
   );
@@ -35,6 +62,10 @@ const StyledInput = styled(Input)`
 
 const Spinning = styled.img`
   max-width: 100px;
+`;
+
+const Progress = styled.progress`
+  height: 40px;
 `;
 
 export default PromptInput;

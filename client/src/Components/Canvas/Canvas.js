@@ -134,6 +134,9 @@ const Canvas = () => {
           setCurrentX(e.nativeEvent.offsetX);
           setCurrentY(e.nativeEvent.offsetY);
         }}
+        onMouseLeave={(e) => {
+          setIsDrawing(false);
+        }}
       ></StyledCanvas>
     </CanvasContainer>
   );
@@ -162,6 +165,7 @@ const CanvasContainer = styled.div`
 const StyledCanvas = styled.canvas`
   background-color: #f2f2f2;
   touch-action: none;
+  box-shadow: 2px 2px 2px 1px rgb(0 0 0 / 20%);
 `;
 
 const Toolbar = styled.div`
