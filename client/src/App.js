@@ -3,6 +3,7 @@ import Home from "./Components/Home/Home";
 import Lobby from "./Components/Lobby/Lobby";
 import PromptInput from "./Components/PromptInput/PromptInput";
 import DrawingScreen from "./Components/DrawingScreen/DrawingScreen";
+import Voting from "./Components/Voting/Voting";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import React from "react";
 import { SocketContext, socket } from "./Context/socket";
@@ -12,6 +13,9 @@ function App() {
     <SocketContext.Provider value={socket}>
       <Router>
         <Switch>
+          <Route path="/Voting">
+            <Voting />
+          </Route>
           <Route path="/Prompt/:id">
             <PromptInput />
           </Route>
