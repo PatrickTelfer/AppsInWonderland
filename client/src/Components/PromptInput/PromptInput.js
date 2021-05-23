@@ -6,20 +6,28 @@ import { Title, SubTitle } from "../Common/Text";
 import { Button } from "../Common/Button";
 import thinking from "../../Ressources/thinking.gif";
 import { SocketContext } from "../../Context/socket";
+import { useHistory, useParams } from "react-router";
 
 const PromptInput = () => {
   const socket = useContext(SocketContext);
   const [second, setSecond] = useState(30);
   const [submitted, setSubmitted] = useState(false);
   const [prompt, setPrompt] = useState("");
+  const history = useHistory();
+  let { id } = useParams();
 
   useEffect(() => {
     if (socket) {
       socket.on("timerUpdate", (second) => {
         setSecond(second);
       });
+      socket.on("timerDone", () => {
+        history.replace({
+          pathname: "/DrawingScreen/" + id,
+        });
+      });
     }
-  }, [socket]);
+  }, [history, id, socket]);
   return (
     <FullWidthContainer>
       <Container>
@@ -39,6 +47,7 @@ const PromptInput = () => {
               onClick={() => {
                 if (prompt !== "") {
                   setSubmitted(true);
+                  socket.emit("submitPrompt", prompt);
                 }
               }}
             >

@@ -31,7 +31,7 @@ io.on("connection", (socket) => {
   socket.on("start", () => {
     console.log("STARTING GAME", playerRoom);
     io.to(playerRoom).emit("hostStartedGame");
-    let second = 30;
+    let second = 15;
     const intervalObj = setInterval(() => {
       io.to(playerRoom).emit("timerUpdate", second);
       second--;
@@ -40,7 +40,17 @@ io.on("connection", (socket) => {
     setTimeout(() => {
       clearInterval(intervalObj);
       io.to(playerRoom).emit("timerDone");
+      LobbyService.setTotalRounds(playerRoom);
     }, second * 1000 + 2000);
+  });
+
+  socket.on("submitPrompt", (prompt) => {
+    LobbyService.addPlayerPrompt(playerRoom, prompt);
+  });
+
+  socket.on("requestingPrompt", () => {
+    const prompt = LobbyService.getRandomPrompt(playerRoom);
+    io.to(playerRoom).emit("sendingPrompt", prompt);
   });
 
   socket.on("disconnect", () => {

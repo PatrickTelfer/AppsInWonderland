@@ -12,7 +12,6 @@ const Canvas = () => {
   const [isDrawing, setIsDrawing] = useState(false);
   const [currentWidth, setCurrentWidth] = useState(0);
   const [isDrawingToolSelected, setIsDrawingToolSelected] = useState(true);
-  const threshHold = 20;
   const [currentColor, setCurrentColor] = useState();
 
   //   useEffect(() => {

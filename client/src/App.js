@@ -18,7 +18,7 @@ function App() {
           <Route path="/Lobby/:id">
             <Lobby />
           </Route>
-          <Route path="/DrawingScreen">
+          <Route path="/DrawingScreen/:id">
             <DrawingScreen />
           </Route>
           <Route path="/">

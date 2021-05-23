@@ -7,6 +7,9 @@ LobbyService.createLobby = (hostName) => {
   const lobby = {
     code: randomCode,
     players: [hostName],
+    prompts: [],
+    currentPrompt: 0,
+    rounds: 0,
   };
   const server = ServerService.getServer();
   server.lobbys.push(lobby);
@@ -69,6 +72,21 @@ LobbyService.removePlayerFromRoom = (id, name) => {
   console.log(lobby.players);
 
   return lobby;
+};
+
+LobbyService.addPlayerPrompt = (id, prompt) => {
+  const lobby = LobbyService.getLobbyById(id);
+  lobby.prompts.push(prompt);
+};
+
+LobbyService.setTotalRounds = (id) => {
+  const lobby = LobbyService.getLobbyById(id);
+  lobby.rounds = lobby.prompts.length;
+};
+
+LobbyService.getRandomPrompt = (id) => {
+  const lobby = LobbyService.getLobbyById(id);
+  return lobby.prompts[lobby.currentPrompt];
 };
 
 module.exports = LobbyService;
