@@ -115,7 +115,7 @@ const Canvas = forwardRef((props, ref) => {
             return;
           }
           let coords = convert(e, ctx.canvas);
-          e.preventDefault();
+          // e.preventDefault();
           drawLine(coords.x, coords.y);
           setCurrentX(coords.x);
           setCurrentY(coords.y);
