@@ -1,17 +1,11 @@
-import React, {
-  createContext,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import Canvas from "../Canvas/Canvas";
 import { Button } from "../Common/Button";
 import { Container, FullWidthContainer } from "../Common/Container";
 import { Title } from "../Common/Text";
 import { SocketContext } from "../../Context/socket";
-import { useHistory } from "react-router";
+import { useHistory, useParams } from "react-router";
 import { Progress } from "../Common/Progress";
 
 const DrawingScreen = () => {
@@ -21,6 +15,7 @@ const DrawingScreen = () => {
   const [second, setSecond] = useState(30);
   const [receivedTimer, setReceivedTimer] = useState(false);
   const canvasRef = useRef();
+  const { id } = useParams();
 
   useEffect(() => {
     if (socket) {
@@ -46,7 +41,7 @@ const DrawingScreen = () => {
       });
       socket.on("timerDone", () => {
         history.replace({
-          pathname: "/Voting",
+          pathname: "/Voting/" + id,
         });
       });
     }
@@ -59,7 +54,8 @@ const DrawingScreen = () => {
         <Canvas ref={canvasRef} />
         <Button
           onClick={() => {
-            console.log(canvasRef.current.toDataURL());
+            const dataURL = canvasRef.current.toDataURL();
+            socket.emit("submittingImage", dataURL);
           }}
         >
           Submit

@@ -8,6 +8,7 @@ LobbyService.createLobby = (hostName) => {
     code: randomCode,
     players: [hostName],
     prompts: [],
+    images: [],
     currentPrompt: 0,
     rounds: 0,
   };
@@ -82,6 +83,25 @@ LobbyService.addPlayerPrompt = (id, prompt) => {
 LobbyService.setTotalRounds = (id) => {
   const lobby = LobbyService.getLobbyById(id);
   lobby.rounds = lobby.prompts.length;
+};
+
+LobbyService.addImageToServer = (id, dataURL) => {
+  const lobby = LobbyService.getLobbyById(id);
+
+  if (lobby === null) {
+    return null;
+  }
+
+  lobby.images.push(dataURL);
+};
+
+LobbyService.getImages = (id) => {
+  const lobby = LobbyService.getLobbyById(id);
+  if (lobby === null) {
+    return [];
+  }
+
+  return lobby.images;
 };
 
 LobbyService.getRandomPrompt = (id) => {

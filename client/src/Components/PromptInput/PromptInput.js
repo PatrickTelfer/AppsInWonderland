@@ -16,7 +16,7 @@ const PromptInput = () => {
   const [prompt, setPrompt] = useState("");
   const history = useHistory();
   const [receivedTimer, setReceivedTimer] = useState(false);
-  let { id } = useParams();
+  const { id } = useParams();
 
   useEffect(() => {
     if (socket) {

@@ -13,7 +13,7 @@ function App() {
     <SocketContext.Provider value={socket}>
       <Router>
         <Switch>
-          <Route path="/Voting">
+          <Route path="/Voting/:id">
             <Voting />
           </Route>
           <Route path="/Prompt/:id">

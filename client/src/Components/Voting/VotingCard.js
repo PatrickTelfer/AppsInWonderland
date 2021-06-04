@@ -1,13 +1,11 @@
 import React from "react";
 import styled from "styled-components";
-const VotingCard = () => {
+
+const VotingCard = ({ src }) => {
   return (
     <CardContainer>
       <UpperContainer>
-        <StyledImg
-          alt="test"
-          src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/80cf80aa-b768-4409-b289-f32d92d64b54/d5u4498-064b497e-a197-4c79-a421-2de796d30af4.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzgwY2Y4MGFhLWI3NjgtNDQwOS1iMjg5LWYzMmQ5MmQ2NGI1NFwvZDV1NDQ5OC0wNjRiNDk3ZS1hMTk3LTRjNzktYTQyMS0yZGU3OTZkMzBhZjQucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.PTYHnvYgUZaO7s1xJREEUq4mKTZPcBWi3oJMV8X0jUM"
-        />
+        <StyledImg alt="test" src={src} />
         <Name>Drawing by Patrick</Name>
       </UpperContainer>
       <BottomContainer>

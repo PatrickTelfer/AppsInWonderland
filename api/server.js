@@ -70,6 +70,15 @@ io.on("connection", (socket) => {
     }
   });
 
+  socket.on("submittingImage", (dataURL) => {
+    LobbyService.addImageToServer(dataURL, playerRoom);
+  });
+
+  socket.on("requestingImages", () => {
+    const images = LobbyService.getImages(playerRoom);
+    io.to(playerRoom).emit("sendingImages", images);
+  });
+
   socket.on("disconnect", () => {
     console.log("DISCONNECT ", playerName, playerRoom);
     const lobby = LobbyService.removePlayerFromRoom(playerRoom, playerName);
