@@ -44,13 +44,30 @@ io.on("connection", (socket) => {
     }, second * 1000 + 2000);
   });
 
+  socket.on("startTimer", () => {
+    let second = 15;
+    const intervalObj = setInterval(() => {
+      io.to(playerRoom).emit("timerUpdate", second);
+      second--;
+    }, 1000);
+
+    setTimeout(() => {
+      clearInterval(intervalObj);
+      io.to(playerRoom).emit("timerDone");
+    }, second * 1000 + 2000);
+  });
+
   socket.on("submitPrompt", (prompt) => {
     LobbyService.addPlayerPrompt(playerRoom, prompt);
   });
 
   socket.on("requestingPrompt", () => {
     const prompt = LobbyService.getRandomPrompt(playerRoom);
-    io.to(playerRoom).emit("sendingPrompt", prompt);
+    if (prompt === null) {
+      io.to(playerRoom).emit("gameOver");
+    } else {
+      io.to(playerRoom).emit("sendingPrompt", prompt);
+    }
   });
 
   socket.on("disconnect", () => {

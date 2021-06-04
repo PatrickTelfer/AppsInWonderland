@@ -86,7 +86,21 @@ LobbyService.setTotalRounds = (id) => {
 
 LobbyService.getRandomPrompt = (id) => {
   const lobby = LobbyService.getLobbyById(id);
-  return lobby.prompts[lobby.currentPrompt];
+
+  if (lobby === null) {
+    return null;
+  }
+  if (lobby.prompts === null || lobby.currentPrompt >= lobby.prompts.length) {
+    console.log(lobby.prompts.length);
+    console.log(lobby.currentPrompt);
+    return null;
+  }
+
+  if (lobby.prompts) {
+    return lobby.prompts[lobby.currentPrompt];
+  } else {
+    return null;
+  }
 };
 
 module.exports = LobbyService;

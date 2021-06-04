@@ -74,7 +74,6 @@ const Lobby = (props) => {
       </LobbyContainer>
       <DrawingContainer>
         <Canvas />
-        <Button>Clear</Button>
       </DrawingContainer>
     </FullWidthContainer>
   );

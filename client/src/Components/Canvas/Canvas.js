@@ -1,10 +1,15 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { forwardRef, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { FaEraser, FaPencilAlt, FaTrash } from "react-icons/fa";
 import { Button } from "../Common/Button";
 
-const Canvas = () => {
-  const canvasRef = useRef(null);
+const Canvas = forwardRef((props, ref) => {
+  if (!ref) {
+    throw new Error("parent must provide canvas ref");
+  }
+
+  let canvasRef = ref;
+
   const containerRef = useRef(null);
   const [ctx, setCtx] = useState(null);
   const [currentX, setCurrentX] = useState(0);
@@ -139,7 +144,7 @@ const Canvas = () => {
       ></StyledCanvas>
     </CanvasContainer>
   );
-};
+});
 
 const convert = (e, canvas) => {
   return {
@@ -151,7 +156,7 @@ const convert = (e, canvas) => {
 const CanvasContainer = styled.div`
   width: 100%;
   height: 100%;
-  padding: 20px;
+  padding: 10px;
   display: flex;
   justify-content: center;
   align-items: center;

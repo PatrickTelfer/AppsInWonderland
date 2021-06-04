@@ -45,6 +45,7 @@ const VotingButton = styled.button`
   padding: 0.5em;
   cursor: pointer;
   border: none;
+  transition: all 0.2s;
   &:hover {
     filter: brightness(125%);
   }

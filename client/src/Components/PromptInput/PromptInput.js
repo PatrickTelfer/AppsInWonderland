@@ -7,6 +7,7 @@ import { Button } from "../Common/Button";
 import thinking from "../../Ressources/thinking.gif";
 import { SocketContext } from "../../Context/socket";
 import { useHistory, useParams } from "react-router";
+import { Progress } from "../Common/Progress";
 
 const PromptInput = () => {
   const socket = useContext(SocketContext);
@@ -14,12 +15,16 @@ const PromptInput = () => {
   const [submitted, setSubmitted] = useState(false);
   const [prompt, setPrompt] = useState("");
   const history = useHistory();
+  const [receivedTimer, setReceivedTimer] = useState(false);
   let { id } = useParams();
 
   useEffect(() => {
     if (socket) {
       socket.on("timerUpdate", (second) => {
         setSecond(second);
+        if (!receivedTimer) {
+          setReceivedTimer(true);
+        }
       });
       socket.on("timerDone", () => {
         history.replace({
@@ -27,14 +32,15 @@ const PromptInput = () => {
         });
       });
     }
-  }, [history, id, socket]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [history, socket]);
   return (
     <FullWidthContainer>
       <Container>
         <Title>Enter a drawing prompt</Title>
         <Spinning src={thinking} alt="loading..." />
 
-        <Progress value={second} max={30} />
+        {receivedTimer && <Progress value={second} max={30} />}
         {!submitted && (
           <>
             <StyledInput
@@ -71,10 +77,6 @@ const StyledInput = styled(Input)`
 
 const Spinning = styled.img`
   max-width: 100px;
-`;
-
-const Progress = styled.progress`
-  height: 40px;
 `;
 
 export default PromptInput;
