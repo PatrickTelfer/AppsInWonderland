@@ -35,13 +35,15 @@ const Canvas = forwardRef((props, ref) => {
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    const height = containerRef.current.offsetHeight;
-    const width = containerRef.current.offsetWidth;
+    // const height = containerRef.current.offsetHeight;
+    // const width = containerRef.current.offsetWidth;
     let ctx = canvas.getContext("2d");
     setCtx(ctx);
-    setCurrentWidth(width);
-    ctx.canvas.width = width - 50;
-    ctx.canvas.height = height - 150;
+    // setCurrentWidth(width);
+    // ctx.canvas.width = width - 50;
+    // ctx.canvas.height = height - 150;
+    ctx.canvas.width = 300;
+    ctx.canvas.height = 420;
     setCurrentColor("#000000");
   }, [ctx]);
 
@@ -158,7 +160,7 @@ const CanvasContainer = styled.div`
   height: 100%;
   padding: 10px;
   display: flex;
-  justify-content: center;
+  justify-content: space-evenly;
   align-items: center;
   flex-direction: column;
   @media (max-width: 768px) {

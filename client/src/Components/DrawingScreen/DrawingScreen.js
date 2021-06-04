@@ -29,10 +29,6 @@ const DrawingScreen = () => {
     }
   }, [socket]);
 
-  // useEffect(() => {
-  //   console.log(canvasRef);
-  // }, [canvasRef]);
-
   useEffect(() => {
     if (socket) {
       socket.on("sendingPrompt", (prompt) => {
@@ -58,7 +54,7 @@ const DrawingScreen = () => {
   return (
     <FullWidthContainer>
       <DrawingContainer>
-        <Title>{prompt || "LOADING PROMPT..."}</Title>
+        <Title style={{ marginTop: 0 }}>{prompt || "LOADING PROMPT..."}</Title>
         {receivedTimer && <Progress value={second} max={30} />}
         <Canvas ref={canvasRef} />
         <Button
@@ -76,7 +72,7 @@ const DrawingScreen = () => {
 const DrawingContainer = styled(Container)`
   padding: 20px;
   @media (max-width: 768px) {
-    padding: 0;
+    padding: 5px;
   }
 `;
 

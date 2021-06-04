@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useRef } from "react";
 import { FullWidthContainer, Container } from "../Common/Container";
 import styled from "styled-components";
 import PlayerList from "./PlayerList";
@@ -18,6 +18,7 @@ const Lobby = (props) => {
   const socket = useContext(SocketContext);
   const [players, setPlayers] = useState([]);
   const history = useHistory();
+  const canvasRef = useRef();
 
   useEffect(() => {
     const getData = async () => {
@@ -73,7 +74,7 @@ const Lobby = (props) => {
         </Button>
       </LobbyContainer>
       <DrawingContainer>
-        <Canvas />
+        <Canvas ref={canvasRef} />
       </DrawingContainer>
     </FullWidthContainer>
   );
