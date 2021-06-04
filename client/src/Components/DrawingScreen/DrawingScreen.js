@@ -50,16 +50,16 @@ const DrawingScreen = () => {
     <FullWidthContainer>
       <DrawingContainer>
         <Title style={{ marginTop: 0 }}>{prompt || "LOADING PROMPT..."}</Title>
-        {receivedTimer && <Progress value={second} max={30} />}
+        <Progress value={second} max={30} />
         <Canvas ref={canvasRef} />
-        <Button
+        <StyledButton
           onClick={() => {
             const dataURL = canvasRef.current.toDataURL();
             socket.emit("submittingImage", dataURL);
           }}
         >
           Submit
-        </Button>
+        </StyledButton>
       </DrawingContainer>
     </FullWidthContainer>
   );
@@ -70,6 +70,10 @@ const DrawingContainer = styled(Container)`
   @media (max-width: 768px) {
     padding: 5px;
   }
+`;
+
+const StyledButton = styled(Button)`
+  padding: 0;
 `;
 
 export default DrawingScreen;

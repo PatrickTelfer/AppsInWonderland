@@ -16,6 +16,7 @@ const Voting = () => {
 
     socket.on("sendingImages", (imgs) => {
       setImages(imgs);
+      console.log(imgs);
     });
   }, [socket]);
 
@@ -24,8 +25,8 @@ const Voting = () => {
       <StyledContainer>
         <Title>Vote!</Title>
         <VoteContainer>
-          {images.forEach((image) => {
-            <VotingCard src={image} />;
+          {images.map((value, index) => {
+            return <VotingCard key={index} src={value} />;
           })}
         </VoteContainer>
       </StyledContainer>
