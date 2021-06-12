@@ -86,7 +86,12 @@ io.on("connection", (socket) => {
   socket.on("voteForPlayer", (votingData) => {
     const isLastVote = LobbyService.voteForPlayer(playerRoom, votingData);
     if (isLastVote) {
-      io.to(playerRoom).emit("lastVote");
+      const isGameOver = LobbyService.isGameOver(playerRoom);
+      if (isGameOver) {
+        io.to(playerRoom).emit("lastVoteEnd");
+      } else {
+        io.to(playerRoom).emit("lastVoteDraw");
+      }
     }
   });
 

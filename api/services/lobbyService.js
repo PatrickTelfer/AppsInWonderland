@@ -120,8 +120,6 @@ LobbyService.getRandomPrompt = (id) => {
     return null;
   }
   if (lobby.prompts === null || lobby.currentPrompt >= lobby.prompts.length) {
-    console.log(lobby.prompts.length);
-    console.log(lobby.currentPrompt);
     return null;
   }
 
@@ -137,6 +135,8 @@ function checkVotes(lobby) {
 
   if (lobby.roundVoteCount >= playerCount * 3) {
     lobby.roundVoteCount = 0;
+    lobby.currentPrompt++;
+    lobby.images = [];
     return true;
   }
 
@@ -170,6 +170,16 @@ LobbyService.voteForPlayer = (id, votingData) => {
     }
   }
   return checkVotes(lobby);
+};
+
+LobbyService.isGameOver = (id) => {
+  const lobby = LobbyService.getLobbyById(id);
+
+  if (lobby.currentPrompt >= lobby.rounds) {
+    return true;
+  }
+
+  return false;
 };
 
 module.exports = LobbyService;

@@ -4,9 +4,10 @@ import { Container, FullWidthContainer } from "../Common/Container";
 import { Title } from "../Common/Text";
 import VotingCard from "./VotingCard";
 import { SocketContext } from "../../Context/socket";
-import { useHistory } from "react-router";
+import { useHistory, useParams } from "react-router";
+import { withRouter } from "react-router-dom";
 
-const Voting = () => {
+const Voting = (props) => {
   const socket = useContext(SocketContext);
   const [images, setImages] = useState([]);
   const [requestedImages, setRequestedImages] = useState(false);
@@ -14,6 +15,9 @@ const Voting = () => {
   const [showCreative, setShowCreative] = useState(true);
   const [showWeird, setShowWeird] = useState(true);
   const history = useHistory();
+  const { id } = useParams();
+  const state = props.location.state;
+  const name = state.name;
 
   useEffect(() => {
     let isMounted = true;
@@ -30,10 +34,22 @@ const Voting = () => {
         }
       });
 
-      socket.on("lastVote", () => {
-        history.replace({
-          pathname: "/",
-        });
+      socket.on("lastVoteDraw", () => {
+        if (isMounted) {
+          history.replace({
+            pathname: "/DrawingScreen/" + id,
+            state: { name },
+          });
+        }
+      });
+
+      socket.on("lastVoteEnd", () => {
+        if (isMounted) {
+          history.replace({
+            pathname: "/",
+            state: { name },
+          });
+        }
       });
     }
 
@@ -80,4 +96,4 @@ const StyledContainer = styled(Container)`
   margin: 1em;
 `;
 
-export default Voting;
+export default withRouter(Voting);
