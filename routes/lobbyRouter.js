@@ -7,13 +7,13 @@ router.get("/:id", function (req, res, next) {
   const id = req.params.id;
   if (id === undefined) {
     console.log("id was undefined");
-    res.status(404).json({
+    res.status(401).json({
       error: "id was undefined",
     });
   }
   const lobby = LobbyService.getLobbyById(id);
   if (lobby === null) {
-    res.status(404).json({
+    res.status(401).json({
       error: "lobby was null",
     });
   } else {
