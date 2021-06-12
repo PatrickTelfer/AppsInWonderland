@@ -39,6 +39,7 @@ const Lobby = (props) => {
       }
       socket.on("playerJoined", (players) => {
         if (isMounted) {
+          console.log(players);
           setPlayers(players);
         }
       });

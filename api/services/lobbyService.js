@@ -2,15 +2,25 @@ var ServerService = require("./serverService");
 
 const LobbyService = {};
 
+function Player(name) {
+  this.name = name;
+  this.votes = {
+    creative: 0,
+    best: 0,
+    weird: 0,
+  };
+}
+
 LobbyService.createLobby = (hostName) => {
   const randomCode = Math.random().toString(36).substr(2, 4);
   const lobby = {
     code: randomCode,
-    players: [hostName],
+    players: [],
     prompts: [],
     images: [],
     currentPrompt: 0,
     rounds: 0,
+    votes: [],
   };
   const server = ServerService.getServer();
   server.lobbys.push(lobby);
@@ -36,18 +46,7 @@ LobbyService.addPlayerToRoom = (id, name) => {
     return null;
   }
 
-  const players = lobby.players;
-  const index = players.indexOf(name);
-  console.log("ADDPLAYERTOROOM: ", id, name);
-  console.log(players);
-
-  if (index !== -1) {
-    return lobby;
-  }
-
-  console.log("ADDING PLAYER ", name, " to lobby", id);
-
-  lobby.players.push(name);
+  lobby.players.push(new Player(name));
   return lobby;
 };
 
@@ -57,18 +56,27 @@ LobbyService.removePlayerFromRoom = (id, name) => {
     return null;
   }
 
-  const index = lobby.players.indexOf(name);
-  console.log(
-    "REMOVING PLAYER ",
-    name,
-    " from lobby ",
-    id,
-    " with index ",
-    index
-  );
+  const players = lobby.players;
+
+  let index = -1;
+  for (let i = 0; i < players.length; i++) {
+    const player = players[i];
+    if (player.name === name) {
+      index = i;
+    }
+  }
+
   console.log(lobby.players);
   if (index > -1) {
     lobby.players.splice(index, 1);
+    console.log(
+      "REMOVING PLAYER ",
+      name,
+      " from lobby ",
+      id,
+      " with index ",
+      index
+    );
   }
   console.log(lobby.players);
 
@@ -122,5 +130,7 @@ LobbyService.getRandomPrompt = (id) => {
     return null;
   }
 };
+
+// LobbyService.submitVote = (id, )
 
 module.exports = LobbyService;

@@ -7,7 +7,7 @@ const PlayerList = (props) => {
     <List>
       {players &&
         players.map((value, index) => {
-          return <ListItem key={index}>{value}</ListItem>;
+          return <ListItem key={index}>{value.name}</ListItem>;
         })}
     </List>
   );
