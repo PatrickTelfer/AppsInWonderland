@@ -17,13 +17,14 @@ const Voting = () => {
       console.log(requestedImages);
       console.log("hello");
 
-      // socket.emit("requestingImages");
+      socket.emit("requestingImages");
       if (isMounted) {
         setRequestedImages(true);
       }
 
       socket.on("sendingImages", (imgs) => {
         if (isMounted) {
+          console.log(imgs);
           setImages(imgs);
         }
       });
@@ -31,7 +32,6 @@ const Voting = () => {
 
     return () => {
       isMounted = false;
-      socket.off();
     };
   }, []);
 
