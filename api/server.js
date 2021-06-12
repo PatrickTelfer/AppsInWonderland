@@ -84,7 +84,10 @@ io.on("connection", (socket) => {
 
   // VOTING EVENTS
   socket.on("voteForPlayer", (votingData) => {
-    LobbyService.voteForPlayer(playerRoom, votingData);
+    const isLastVote = LobbyService.voteForPlayer(playerRoom, votingData);
+    if (isLastVote) {
+      io.to(playerRoom).emit("lastVote");
+    }
   });
 
   // DISCONNECT

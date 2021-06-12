@@ -4,7 +4,7 @@ import { Container, FullWidthContainer } from "../Common/Container";
 import { Title } from "../Common/Text";
 import VotingCard from "./VotingCard";
 import { SocketContext } from "../../Context/socket";
-import { useParams } from "react-router";
+import { useHistory } from "react-router";
 
 const Voting = () => {
   const socket = useContext(SocketContext);
@@ -13,13 +13,11 @@ const Voting = () => {
   const [showBest, setShowBest] = useState(true);
   const [showCreative, setShowCreative] = useState(true);
   const [showWeird, setShowWeird] = useState(true);
+  const history = useHistory();
 
   useEffect(() => {
     let isMounted = true;
-    if (socket && !requestedImages) {
-      console.log(requestedImages);
-      console.log("hello");
-
+    if (socket && !requestedImages && isMounted) {
       socket.emit("requestingImages");
       if (isMounted) {
         setRequestedImages(true);
@@ -30,6 +28,12 @@ const Voting = () => {
           console.log(imgs);
           setImages(imgs);
         }
+      });
+
+      socket.on("lastVote", () => {
+        history.replace({
+          pathname: "/",
+        });
       });
     }
 

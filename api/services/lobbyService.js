@@ -21,6 +21,7 @@ LobbyService.createLobby = (hostName) => {
     currentPrompt: 0,
     rounds: 0,
     votes: [],
+    roundVoteCount: 0,
   };
   const server = ServerService.getServer();
   server.lobbys.push(lobby);
@@ -131,12 +132,26 @@ LobbyService.getRandomPrompt = (id) => {
   }
 };
 
+function checkVotes(lobby) {
+  const playerCount = lobby.players.length;
+
+  if (lobby.roundVoteCount >= playerCount * 3) {
+    lobby.roundVoteCount = 0;
+    return true;
+  }
+
+  return false;
+}
+
+// returns true if that was the last vote, false otherwise
 LobbyService.voteForPlayer = (id, votingData) => {
   const { name, category } = votingData;
   const lobby = LobbyService.getLobbyById(id);
   if (lobby == null) {
-    return null;
+    return false;
   }
+
+  lobby.roundVoteCount++;
 
   const players = lobby.players;
   for (let i = 0; i < players.length; i++) {
@@ -154,6 +169,7 @@ LobbyService.voteForPlayer = (id, votingData) => {
       break;
     }
   }
+  return checkVotes(lobby);
 };
 
 module.exports = LobbyService;
