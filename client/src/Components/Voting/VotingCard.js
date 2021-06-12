@@ -54,8 +54,6 @@ const VotingButton = styled.button`
 `;
 
 const UpperContainer = styled.div`
-  width: 300px;
-  height: 420px;
   background-color: #f2f2f2;
   flex-direction: column;
   align-items: center;
@@ -77,7 +75,6 @@ const Name = styled.div`
 
 const StyledImg = styled.img`
   margin-top: auto;
-  width: 200px;
 `;
 
 export default VotingCard;

@@ -3,7 +3,7 @@ import styled from "styled-components";
 import Canvas from "../Canvas/Canvas";
 import { Button } from "../Common/Button";
 import { Container, FullWidthContainer } from "../Common/Container";
-import { Title } from "../Common/Text";
+import { Title, SubTitle } from "../Common/Text";
 import { SocketContext } from "../../Context/socket";
 import { useHistory, useParams, withRouter } from "react-router";
 import { Progress } from "../Common/Progress";
@@ -14,6 +14,7 @@ const DrawingScreen = (props) => {
   const history = useHistory();
   const [second, setSecond] = useState(30);
   const [receivedTimer, setReceivedTimer] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
   const canvasRef = useRef();
   const { id } = useParams();
 
@@ -65,19 +66,29 @@ const DrawingScreen = (props) => {
       <DrawingContainer>
         <Title style={{ marginTop: 0 }}>{prompt || "LOADING PROMPT..."}</Title>
         <Progress value={second} max={30} />
-        <Canvas ref={canvasRef} />
-        <StyledButton
-          onClick={() => {
-            const dataURL = canvasRef.current.toDataURL();
-            const imageData = {
-              name,
-              dataURL,
-            };
-            socket.emit("submittingImage", imageData);
-          }}
-        >
-          Submit
-        </StyledButton>
+        {!isSubmitted && (
+          <>
+            <Canvas ref={canvasRef} />
+            <StyledButton
+              onClick={() => {
+                setIsSubmitted(true);
+                const dataURL = canvasRef.current.toDataURL();
+                const imageData = {
+                  name,
+                  dataURL,
+                };
+                socket.emit("submittingImage", imageData);
+              }}
+            >
+              Submit
+            </StyledButton>
+          </>
+        )}
+        {isSubmitted && (
+          <SubTitle>
+            Thank you for your submission. Waiting for others.
+          </SubTitle>
+        )}
       </DrawingContainer>
     </FullWidthContainer>
   );

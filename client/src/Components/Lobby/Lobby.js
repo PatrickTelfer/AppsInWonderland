@@ -45,15 +45,13 @@ const Lobby = (props) => {
 
       socket.on("hostStartedGame", () => {
         console.log("HERE", name);
+        isMounted = false;
         history.replace({
           pathname: "/Prompt/" + serverData.code,
           state: { ...serverData, name },
         });
       });
     }
-    return () => {
-      isMounted = false;
-    };
   }, [socket, joined, name, serverCode, history, serverData]);
 
   const startGame = () => {
