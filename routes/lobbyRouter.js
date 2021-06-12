@@ -4,6 +4,7 @@ var LobbyService = require("../services/lobbyService");
 
 // Get a lobby
 router.get("/:id", function (req, res, next) {
+  console.log("get lobby with id", req.params.id);
   const id = req.params.id;
   if (id === undefined) {
     console.log("id was undefined");
