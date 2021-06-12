@@ -46,7 +46,7 @@ const Voting = (props) => {
       socket.on("lastVoteEnd", () => {
         if (isMounted) {
           history.replace({
-            pathname: "/",
+            pathname: "/Results/" + id,
             state: { name },
           });
         }

@@ -182,4 +182,13 @@ LobbyService.isGameOver = (id) => {
   return false;
 };
 
+LobbyService.getVotes = (id) => {
+  const lobby = LobbyService.getLobbyById(id);
+  if (!lobby) {
+    return null;
+  }
+
+  return lobby.players;
+};
+
 module.exports = LobbyService;

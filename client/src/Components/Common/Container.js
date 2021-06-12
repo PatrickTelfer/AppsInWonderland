@@ -15,10 +15,9 @@ export const FullWidthContainer = styled.div`
 `;
 
 export const Container = styled.div`
-  width: 80%;
+  flex: 1;
   height: 90%;
   @media (max-width: 768px) {
-    width: 100%;
     height: 90%;
   }
   background-color: white;

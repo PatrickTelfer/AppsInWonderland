@@ -95,6 +95,12 @@ io.on("connection", (socket) => {
     }
   });
 
+  socket.on("requestingVotes", () => {
+    const votes = LobbyService.getVotes(playerRoom);
+
+    io.to(playerRoom).emit("sendingVotes", votes);
+  });
+
   // DISCONNECT
   socket.on("disconnect", () => {
     console.log("DISCONNECT ", playerName, playerRoom);

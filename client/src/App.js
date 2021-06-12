@@ -4,6 +4,7 @@ import Lobby from "./Components/Lobby/Lobby";
 import PromptInput from "./Components/PromptInput/PromptInput";
 import DrawingScreen from "./Components/DrawingScreen/DrawingScreen";
 import Voting from "./Components/Voting/Voting";
+import Results from "./Components/Results/Results";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import React from "react";
 import { SocketContext, socket } from "./Context/socket";
@@ -13,6 +14,9 @@ function App() {
     <SocketContext.Provider value={socket}>
       <Router>
         <Switch>
+          <Route path="/Results/:id">
+            <Results />
+          </Route>
           <Route path="/Voting/:id">
             <Voting />
           </Route>
