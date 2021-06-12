@@ -1,13 +1,13 @@
 import React from "react";
 import styled from "styled-components";
 
-const VotingCard = ({ src }) => {
+const VotingCard = ({ src, name }) => {
   console.log("HEREa");
   return (
     <CardContainer>
       <UpperContainer>
         <StyledImg alt="test" src={src} />
-        <Name>Drawing by Patrick</Name>
+        <Name>Drawing by {name}</Name>
       </UpperContainer>
       <BottomContainer>
         <VotingButton>🥇 Best Drawing 🥇</VotingButton>

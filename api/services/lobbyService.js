@@ -85,14 +85,14 @@ LobbyService.setTotalRounds = (id) => {
   lobby.rounds = lobby.prompts.length;
 };
 
-LobbyService.addImageToServer = (id, dataURL) => {
+LobbyService.addImageToServer = (id, imageData) => {
   const lobby = LobbyService.getLobbyById(id);
 
   if (lobby === null) {
     return null;
   }
 
-  lobby.images.push(dataURL);
+  lobby.images.push(imageData);
 };
 
 LobbyService.getImages = (id) => {

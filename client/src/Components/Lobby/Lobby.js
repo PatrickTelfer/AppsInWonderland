@@ -11,6 +11,7 @@ import { SocketContext } from "../../Context/socket";
 const Lobby = (props) => {
   const [joined, setJoined] = useState(false);
   const serverData = props.location.state;
+  console.log(props);
   // const socket = props.socket;
   const serverCode = serverData.code;
   const name = serverData.name;
@@ -30,22 +31,29 @@ const Lobby = (props) => {
   }, [serverCode]);
 
   useEffect(() => {
+    let isMounted = true;
     if (socket && !joined) {
-      console.log(serverCode);
-      socket.emit("join", { serverCode, name });
-      setJoined(true);
+      if (isMounted) {
+        socket.emit("join", { serverCode, name });
+        setJoined(true);
+      }
       socket.on("playerJoined", (players) => {
-        setPlayers(players);
+        if (isMounted) {
+          setPlayers(players);
+        }
       });
 
       socket.on("hostStartedGame", () => {
-        console.log("HERE");
+        console.log("HERE", name);
         history.replace({
           pathname: "/Prompt/" + serverData.code,
           state: { ...serverData, name },
         });
       });
     }
+    return () => {
+      isMounted = false;
+    };
   }, [socket, joined, name, serverCode, history, serverData]);
 
   const startGame = () => {

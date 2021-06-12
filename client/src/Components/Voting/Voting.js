@@ -9,16 +9,31 @@ import { useParams } from "react-router";
 const Voting = () => {
   const socket = useContext(SocketContext);
   const [images, setImages] = useState([]);
-  const { id } = useParams();
+  const [requestedImages, setRequestedImages] = useState(false);
 
   useEffect(() => {
-    socket.emit("requestingImages");
+    let isMounted = true;
+    if (socket && !requestedImages) {
+      console.log(requestedImages);
+      console.log("hello");
 
-    socket.on("sendingImages", (imgs) => {
-      setImages(imgs);
-      console.log(imgs);
-    });
-  }, [socket]);
+      // socket.emit("requestingImages");
+      if (isMounted) {
+        setRequestedImages(true);
+      }
+
+      socket.on("sendingImages", (imgs) => {
+        if (isMounted) {
+          setImages(imgs);
+        }
+      });
+    }
+
+    return () => {
+      isMounted = false;
+      socket.off();
+    };
+  }, []);
 
   return (
     <FullWidthContainer>
@@ -26,7 +41,9 @@ const Voting = () => {
         <Title>Vote!</Title>
         <VoteContainer>
           {images.map((value, index) => {
-            return <VotingCard key={index} src={value} />;
+            return (
+              <VotingCard key={index} src={value.dataURL} name={value.name} />
+            );
           })}
         </VoteContainer>
       </StyledContainer>

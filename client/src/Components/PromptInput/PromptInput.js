@@ -6,10 +6,13 @@ import { Title, SubTitle } from "../Common/Text";
 import { Button } from "../Common/Button";
 import thinking from "../../Ressources/thinking.gif";
 import { SocketContext } from "../../Context/socket";
-import { useHistory, useParams } from "react-router";
+import { useHistory, useParams, withRouter } from "react-router";
 import { Progress } from "../Common/Progress";
 
-const PromptInput = () => {
+const PromptInput = (props) => {
+  const state = props.location.state;
+
+  const name = state.name;
   const socket = useContext(SocketContext);
   const [second, setSecond] = useState(30);
   const [submitted, setSubmitted] = useState(false);
@@ -19,19 +22,28 @@ const PromptInput = () => {
   const { id } = useParams();
 
   useEffect(() => {
+    let isMounted = true;
     if (socket) {
       socket.on("timerUpdate", (second) => {
-        setSecond(second);
-        if (!receivedTimer) {
-          setReceivedTimer(true);
+        if (isMounted) {
+          setSecond(second);
+          if (!receivedTimer) {
+            setReceivedTimer(true);
+          }
         }
       });
       socket.on("timerDone", () => {
-        history.replace({
-          pathname: "/DrawingScreen/" + id,
-        });
+        if (isMounted) {
+          history.replace({
+            pathname: "/DrawingScreen/" + id,
+            state: { name },
+          });
+        }
       });
     }
+    return () => {
+      isMounted = false;
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [history, socket]);
   return (
@@ -78,5 +90,4 @@ const StyledInput = styled(Input)`
 const Spinning = styled.img`
   max-width: 100px;
 `;
-
-export default PromptInput;
+export default withRouter(PromptInput);

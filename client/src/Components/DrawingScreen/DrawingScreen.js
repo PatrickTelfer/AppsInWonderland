@@ -5,10 +5,10 @@ import { Button } from "../Common/Button";
 import { Container, FullWidthContainer } from "../Common/Container";
 import { Title } from "../Common/Text";
 import { SocketContext } from "../../Context/socket";
-import { useHistory, useParams } from "react-router";
+import { useHistory, useParams, withRouter } from "react-router";
 import { Progress } from "../Common/Progress";
 
-const DrawingScreen = () => {
+const DrawingScreen = (props) => {
   const socket = useContext(SocketContext);
   const [prompt, setPrompt] = useState("");
   const history = useHistory();
@@ -16,6 +16,9 @@ const DrawingScreen = () => {
   const [receivedTimer, setReceivedTimer] = useState(false);
   const canvasRef = useRef();
   const { id } = useParams();
+
+  const state = props.location.state;
+  const name = state.name;
 
   useEffect(() => {
     if (socket) {
@@ -25,26 +28,37 @@ const DrawingScreen = () => {
   }, [socket]);
 
   useEffect(() => {
+    let isMounted = true;
     if (socket) {
       socket.on("sendingPrompt", (prompt) => {
-        setPrompt(prompt);
+        if (isMounted) {
+          setPrompt(prompt);
+        }
       });
       socket.on("gameOver", () => {
         history.replace("/");
       });
 
       socket.on("timerUpdate", (second) => {
-        setSecond(second);
-        if (!receivedTimer) {
-          setReceivedTimer(true);
+        if (isMounted) {
+          setSecond(second);
+          if (!receivedTimer) {
+            setReceivedTimer(true);
+          }
         }
       });
       socket.on("timerDone", () => {
-        history.replace({
-          pathname: "/Voting/" + id,
-        });
+        if (isMounted) {
+          history.replace({
+            pathname: "/Voting/" + id,
+            state: { name },
+          });
+        }
       });
     }
+    return () => {
+      isMounted = false;
+    };
   }, [history, socket]);
   return (
     <FullWidthContainer>
@@ -55,7 +69,11 @@ const DrawingScreen = () => {
         <StyledButton
           onClick={() => {
             const dataURL = canvasRef.current.toDataURL();
-            socket.emit("submittingImage", dataURL);
+            const imageData = {
+              name,
+              dataURL,
+            };
+            socket.emit("submittingImage", imageData);
           }}
         >
           Submit
@@ -76,4 +94,4 @@ const StyledButton = styled(Button)`
   padding: 0;
 `;
 
-export default DrawingScreen;
+export default withRouter(DrawingScreen);

@@ -45,7 +45,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("startTimer", () => {
-    let second = 5;
+    let second = 10;
     const intervalObj = setInterval(() => {
       io.to(playerRoom).emit("timerUpdate", second);
       second--;
@@ -70,13 +70,14 @@ io.on("connection", (socket) => {
     }
   });
 
-  socket.on("submittingImage", (dataURL) => {
-    LobbyService.addImageToServer(playerRoom, dataURL);
+  socket.on("submittingImage", (imageData) => {
+    LobbyService.addImageToServer(playerRoom, imageData);
   });
 
   socket.on("requestingImages", () => {
     const images = LobbyService.getImages(playerRoom);
-    io.to(playerRoom).emit("sendingImages", images);
+    console.log("REQUESTING IMAGES", socket.id);
+    io.to(socket.id).emit("sendingImages", images);
   });
 
   socket.on("disconnect", () => {
