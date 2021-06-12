@@ -10,6 +10,9 @@ const Voting = () => {
   const socket = useContext(SocketContext);
   const [images, setImages] = useState([]);
   const [requestedImages, setRequestedImages] = useState(false);
+  const [showBest, setShowBest] = useState(true);
+  const [showCreative, setShowCreative] = useState(true);
+  const [showWeird, setShowWeird] = useState(true);
 
   useEffect(() => {
     let isMounted = true;
@@ -42,7 +45,17 @@ const Voting = () => {
         <VoteContainer>
           {images.map((value, index) => {
             return (
-              <VotingCard key={index} src={value.dataURL} name={value.name} />
+              <VotingCard
+                key={index}
+                src={value.dataURL}
+                name={value.name}
+                showBest={showBest}
+                setShowBest={setShowBest}
+                showCreative={showCreative}
+                setShowCreative={setShowCreative}
+                showWeird={showWeird}
+                setShowWeird={setShowWeird}
+              />
             );
           })}
         </VoteContainer>

@@ -30,14 +30,16 @@ const DrawingScreen = (props) => {
 
   useEffect(() => {
     let isMounted = true;
-    if (socket) {
+    if (socket && isMounted) {
       socket.on("sendingPrompt", (prompt) => {
         if (isMounted) {
           setPrompt(prompt);
         }
       });
       socket.on("gameOver", () => {
-        history.replace("/");
+        if (isMounted) {
+          history.replace("/");
+        }
       });
 
       socket.on("timerUpdate", (second) => {

@@ -1,10 +1,16 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 
-const VotingCard = ({ src, name }) => {
-  const [showBest, setShowBest] = useState(true);
-  const [showCreative, setShowCreative] = useState(true);
-  const [showWeird, setShowWeird] = useState(true);
+const VotingCard = ({
+  src,
+  name,
+  showBest,
+  setShowBest,
+  showWeird,
+  setShowWeird,
+  showCreative,
+  setShowCreative,
+}) => {
   return (
     <CardContainer>
       <UpperContainer>
