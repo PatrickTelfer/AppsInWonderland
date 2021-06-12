@@ -52,6 +52,15 @@ const DrawingScreen = (props) => {
       });
       socket.on("timerDone", () => {
         if (isMounted) {
+          if (!isSubmitted) {
+            const dataURL = canvasRef.current.toDataURL();
+            const imageData = {
+              name,
+              dataURL,
+            };
+            socket.emit("submittingImage", imageData);
+          }
+
           history.replace({
             pathname: "/Voting/" + id,
             state: { name },
