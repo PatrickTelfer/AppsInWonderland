@@ -131,6 +131,29 @@ LobbyService.getRandomPrompt = (id) => {
   }
 };
 
-// LobbyService.submitVote = (id, )
+LobbyService.voteForPlayer = (id, votingData) => {
+  const { name, category } = votingData;
+  const lobby = LobbyService.getLobbyById(id);
+  if (lobby == null) {
+    return null;
+  }
+
+  const players = lobby.players;
+  for (let i = 0; i < players.length; i++) {
+    const player = players[i];
+
+    if (player.name === name) {
+      if (category === "best") {
+        player.votes.best += 1;
+      } else if (category === "creative") {
+        player.votes.creative += 1;
+      } else if (category === "weird") {
+        player.votes.weird += 1;
+      }
+
+      break;
+    }
+  }
+};
 
 module.exports = LobbyService;

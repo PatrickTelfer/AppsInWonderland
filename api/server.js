@@ -27,6 +27,7 @@ io.on("connection", (socket) => {
     }
   });
 
+  // TIMER EVENTS
   socket.on("start", () => {
     console.log("STARTING GAME", playerRoom);
     io.to(playerRoom).emit("hostStartedGame");
@@ -56,6 +57,7 @@ io.on("connection", (socket) => {
     }, second * 1000 + 2000);
   });
 
+  // PROMPT EVENTS
   socket.on("submitPrompt", (prompt) => {
     LobbyService.addPlayerPrompt(playerRoom, prompt);
   });
@@ -69,6 +71,7 @@ io.on("connection", (socket) => {
     }
   });
 
+  // IMAGE EVENTS
   socket.on("submittingImage", (imageData) => {
     LobbyService.addImageToServer(playerRoom, imageData);
   });
@@ -79,6 +82,12 @@ io.on("connection", (socket) => {
     io.to(socket.id).emit("sendingImages", images);
   });
 
+  // VOTING EVENTS
+  socket.on("voteForPlayer", (votingData) => {
+    LobbyService.voteForPlayer(playerRoom, votingData);
+  });
+
+  // DISCONNECT
   socket.on("disconnect", () => {
     console.log("DISCONNECT ", playerName, playerRoom);
     const lobby = LobbyService.removePlayerFromRoom(playerRoom, playerName);

@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect } from "react";
 import styled from "styled-components";
+import { SocketContext } from "../../Context/socket";
 
 const VotingCard = ({
   src,
@@ -11,6 +12,8 @@ const VotingCard = ({
   showCreative,
   setShowCreative,
 }) => {
+  const socket = useContext(SocketContext);
+
   return (
     <CardContainer>
       <UpperContainer>
@@ -22,6 +25,7 @@ const VotingCard = ({
           <VotingButton
             onClick={() => {
               setShowBest(false);
+              socket.emit("voteForPlayer", { name: name, category: "best" });
             }}
           >
             🥇 Best Drawing 🥇
@@ -33,6 +37,10 @@ const VotingCard = ({
             style={{ backgroundColor: "#7CE3F1" }}
             onClick={() => {
               setShowCreative(false);
+              socket.emit("voteForPlayer", {
+                name: name,
+                category: "creative",
+              });
             }}
           >
             🎨 Most Creative 🎨
@@ -44,6 +52,7 @@ const VotingCard = ({
             style={{ backgroundColor: "#FD7070" }}
             onClick={() => {
               setShowWeird(false);
+              socket.emit("voteForPlayer", { name: name, category: "weird" });
             }}
           >
             🤔 ??? 🤔
