@@ -29,7 +29,6 @@ const Voting = (props) => {
 
       socket.on("sendingImages", (imgs) => {
         if (isMounted) {
-          console.log(imgs);
           setImages(imgs);
         }
       });
