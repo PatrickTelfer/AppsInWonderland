@@ -1,7 +1,6 @@
 var http = require("http");
 var app = require("./app");
 var LobbyService = require("./services/lobbyService");
-var ServerService = require("./services/serverService");
 
 var server = http.createServer(app);
 

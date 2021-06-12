@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 
 const VotingCard = ({ src, name }) => {
-  console.log("HEREa");
+  const [showBest, setShowBest] = useState(true);
+  const [showCreative, setShowCreative] = useState(true);
+  const [showWeird, setShowWeird] = useState(true);
   return (
     <CardContainer>
       <UpperContainer>
@@ -10,13 +12,37 @@ const VotingCard = ({ src, name }) => {
         <Name>Drawing by {name}</Name>
       </UpperContainer>
       <BottomContainer>
-        <VotingButton>🥇 Best Drawing 🥇</VotingButton>
-        <VotingButton style={{ backgroundColor: "#7CE3F1" }}>
-          🎨 Most Creative 🎨
-        </VotingButton>
-        <VotingButton style={{ backgroundColor: "#FD7070" }}>
-          🤔 ??? 🤔
-        </VotingButton>
+        {showBest && (
+          <VotingButton
+            onClick={() => {
+              setShowBest(false);
+            }}
+          >
+            🥇 Best Drawing 🥇
+          </VotingButton>
+        )}
+
+        {showCreative && (
+          <VotingButton
+            style={{ backgroundColor: "#7CE3F1" }}
+            onClick={() => {
+              setShowCreative(false);
+            }}
+          >
+            🎨 Most Creative 🎨
+          </VotingButton>
+        )}
+
+        {showWeird && (
+          <VotingButton
+            style={{ backgroundColor: "#FD7070" }}
+            onClick={() => {
+              setShowWeird(false);
+            }}
+          >
+            🤔 ??? 🤔
+          </VotingButton>
+        )}
       </BottomContainer>
     </CardContainer>
   );
