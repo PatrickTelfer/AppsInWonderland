@@ -13,10 +13,12 @@ router.post("/", function (req, res, next) {
 router.get("/:id", function (req, res, next) {
   const id = req.params.id;
   if (id === undefined) {
+    console.log("id was undefined");
     res.status(404);
   }
   const lobby = LobbyService.getLobbyById(id);
   if (lobby === null) {
+    console.log("lobby was null ", id);
     res.status(404).json({});
   } else {
     res.status(200).json(lobby);
