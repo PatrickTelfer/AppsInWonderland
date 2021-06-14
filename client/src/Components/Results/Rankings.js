@@ -10,7 +10,9 @@ const Rankings = (props) => {
         {data.map((value, index) => {
           return (
             <ListItem key={index}>
-              {value.name} <span style={{ color: "red" }}>({value.value})</span>
+              {index === 0 && " 🥇 "}
+              {value.name}{" "}
+              <span style={{ color: "red" }}> ({value.value} votes)</span>
             </ListItem>
           );
         })}
