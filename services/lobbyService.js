@@ -152,7 +152,6 @@ LobbyService.getRandomPrompt = (id) => {
 
 function checkVotes(lobby) {
   const imageCount = lobby.images.length;
-  console.log(lobby.roundVoteCount, imageCount);
 
   if (lobby.roundVoteCount >= imageCount * 3) {
     lobby.roundVoteCount = 0;
