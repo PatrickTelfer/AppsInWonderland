@@ -24,12 +24,18 @@ LobbyService.createLobby = (hostName) => {
     roundVoteCount: 0,
   };
   const server = ServerService.getServer();
-  server.lobbys.push(lobby);
+  if (server && server.lobbys) {
+    server.lobbys.push(lobby);
+  }
   return randomCode;
 };
 
 LobbyService.getLobbyById = (id) => {
   const server = ServerService.getServer();
+  if (!server || !server.lobbys) {
+    return null;
+  }
+
   const lobbys = server.lobbys;
   let lobby = null;
   for (let i = 0; i < lobbys.length; i++) {
@@ -66,7 +72,6 @@ LobbyService.removePlayerFromRoom = (id, name) => {
     }
   }
 
-  console.log(lobby.players);
   if (index > -1) {
     lobby.players.splice(index, 1);
     console.log(
@@ -90,7 +95,6 @@ LobbyService.removePlayerFromRoom = (id, name) => {
     if (index > -1) {
       server.lobbys.splice(index, 1);
     }
-    console.log(server);
   }
 
   return lobby;
@@ -98,18 +102,22 @@ LobbyService.removePlayerFromRoom = (id, name) => {
 
 LobbyService.addPlayerPrompt = (id, prompt) => {
   const lobby = LobbyService.getLobbyById(id);
-  lobby.prompts.push(prompt);
+  if (lobby && lobby.prompts) {
+    lobby.prompts.push(prompt);
+  }
 };
 
 LobbyService.setTotalRounds = (id) => {
   const lobby = LobbyService.getLobbyById(id);
-  lobby.rounds = lobby.prompts.length;
+  if (lobby && lobby.prompts) {
+    lobby.rounds = lobby.prompts.length;
+  }
 };
 
 LobbyService.addImageToServer = (id, imageData) => {
   const lobby = LobbyService.getLobbyById(id);
 
-  if (lobby === null) {
+  if (!lobby || !lobby.images) {
     return null;
   }
 
@@ -186,6 +194,9 @@ LobbyService.voteForPlayer = (id, votingData) => {
 
 LobbyService.isGameOver = (id) => {
   const lobby = LobbyService.getLobbyById(id);
+  if (!lobby) {
+    return true;
+  }
 
   if (lobby.currentPrompt >= lobby.rounds) {
     return true;
