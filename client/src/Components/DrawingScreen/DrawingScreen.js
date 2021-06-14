@@ -13,7 +13,6 @@ const DrawingScreen = (props) => {
   const [prompt, setPrompt] = useState("");
   const history = useHistory();
   const [second, setSecond] = useState(30);
-  const [receivedTimer, setReceivedTimer] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const canvasRef = useRef();
   const { id } = useParams();
@@ -31,35 +30,21 @@ const DrawingScreen = (props) => {
   useEffect(() => {
     let isMounted = true;
     if (socket && isMounted) {
-      socket.on("sendingPrompt", (prompt) => {
-        if (isMounted) {
-          setPrompt(prompt);
-        }
-      });
-      socket.on("gameOver", () => {
-        if (isMounted) {
-          history.replace("/");
-        }
-      });
-
       socket.on("timerUpdate", (second) => {
         if (isMounted) {
           setSecond(second);
-          if (!receivedTimer) {
-            setReceivedTimer(true);
-          }
         }
       });
       socket.on("timerDone", () => {
         if (isMounted) {
-          // if (!isSubmitted) {
-          //   const dataURL = canvasRef.current.toDataURL();
-          //   const imageData = {
-          //     name,
-          //     dataURL,
-          //   };
-          //   socket.emit("submittingImage", imageData);
-          // }
+          if (!isSubmitted) {
+            const dataURL = canvasRef.current.toDataURL();
+            const imageData = {
+              name,
+              dataURL,
+            };
+            socket.emit("submittingImage", imageData);
+          }
 
           history.replace({
             pathname: "/Voting/" + id,
@@ -70,8 +55,31 @@ const DrawingScreen = (props) => {
     }
     return () => {
       isMounted = false;
+      socket.removeAllListeners("timerDone");
+      socket.removeAllListeners("timerUpdate");
     };
-  }, [history, socket]);
+  }, [socket, isSubmitted]);
+
+  useEffect(() => {
+    let isMounted = true;
+    if (socket && isMounted) {
+      socket.on("sendingPrompt", (prompt) => {
+        if (isMounted) {
+          setPrompt(prompt);
+        }
+      });
+      socket.on("gameOver", () => {
+        if (isMounted) {
+          history.replace("/");
+        }
+      });
+    }
+    return () => {
+      isMounted = false;
+      socket.removeAllListeners("sendingPrompt");
+      socket.removeAllListeners("gameOver");
+    };
+  }, [history, socket, isSubmitted]);
   return (
     <FullWidthContainer>
       <DrawingContainer>

@@ -34,6 +34,9 @@ const PromptInput = (props) => {
       });
       socket.on("timerDone", () => {
         if (isMounted) {
+          if (!submitted && prompt !== "") {
+            socket.emit("submitPrompt", prompt);
+          }
           history.replace({
             pathname: "/DrawingScreen/" + id,
             state: { name },
@@ -43,16 +46,18 @@ const PromptInput = (props) => {
     }
     return () => {
       isMounted = false;
+      socket.removeAllListeners("timerDone");
+      socket.removeAllListeners("timerUpdate");
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [history, socket]);
+  }, [history, socket, submitted, prompt]);
   return (
     <FullWidthContainer>
       <Container>
         <Title>Enter a drawing prompt</Title>
         <Spinning src={thinking} alt="loading..." />
 
-        {receivedTimer && <Progress value={second} max={30} />}
+        {receivedTimer && <Progress value={second} max={60} />}
         {!submitted && (
           <>
             <StyledInput
