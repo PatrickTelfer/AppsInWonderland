@@ -84,7 +84,7 @@ const DrawingScreen = (props) => {
     <FullWidthContainer>
       <DrawingContainer>
         <Title style={{ marginTop: 0 }}>{prompt || "LOADING PROMPT..."}</Title>
-        <Progress value={second} max={30} />
+        <Progress value={second} max={60} />
         {!isSubmitted && (
           <>
             <Canvas ref={canvasRef} />

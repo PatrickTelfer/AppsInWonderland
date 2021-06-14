@@ -100,6 +100,15 @@ LobbyService.removePlayerFromRoom = (id, name) => {
   return lobby;
 };
 
+LobbyService.isAllPromptsSubmitted = (id) => {
+  const lobby = LobbyService.getLobbyById(id);
+  if (lobby && lobby.players && lobby.prompts) {
+    return lobby.players.length === lobby.prompts.length;
+  }
+
+  return false;
+};
+
 LobbyService.addPlayerPrompt = (id, prompt) => {
   const lobby = LobbyService.getLobbyById(id);
   if (lobby && lobby.prompts) {
