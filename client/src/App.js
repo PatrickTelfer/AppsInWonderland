@@ -1,4 +1,3 @@
-import "./App.css";
 import Home from "./Components/Home/Home";
 import Lobby from "./Components/Lobby/Lobby";
 import PromptInput from "./Components/PromptInput/PromptInput";
