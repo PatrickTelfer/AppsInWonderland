@@ -25,7 +25,6 @@ LobbyService.createLobby = (hostName) => {
   };
   const server = ServerService.getServer();
   server.lobbys.push(lobby);
-  server.lobbyCount++;
   return randomCode;
 };
 
@@ -79,7 +78,20 @@ LobbyService.removePlayerFromRoom = (id, name) => {
       index
     );
   }
-  console.log(lobby.players);
+  if (lobby.players.length === 0) {
+    const server = ServerService.getServer();
+    let index = -1;
+    for (let i = 0; i < server.lobbys.length; i++) {
+      if (server.lobbys[i].code === lobby.code) {
+        index = i;
+      }
+    }
+
+    if (index > -1) {
+      server.lobbys.splice(index, 1);
+    }
+    console.log(server);
+  }
 
   return lobby;
 };

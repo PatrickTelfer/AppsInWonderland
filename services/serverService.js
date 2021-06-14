@@ -1,6 +1,5 @@
 const server = {
   lobbys: [],
-  lobbyCount: 0,
 };
 
 const ServerService = {};
