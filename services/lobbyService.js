@@ -151,9 +151,10 @@ LobbyService.getRandomPrompt = (id) => {
 };
 
 function checkVotes(lobby) {
-  const playerCount = lobby.players.length;
+  const imageCount = lobby.images.length;
+  console.log(lobby.roundVoteCount, imageCount);
 
-  if (lobby.roundVoteCount >= playerCount * 3) {
+  if (lobby.roundVoteCount >= imageCount * 3) {
     lobby.roundVoteCount = 0;
     lobby.currentPrompt++;
     lobby.images = [];
