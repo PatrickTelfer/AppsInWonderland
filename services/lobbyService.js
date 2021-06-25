@@ -22,6 +22,7 @@ LobbyService.createLobby = (hostName) => {
     rounds: 0,
     votes: [],
     roundVoteCount: 0,
+    lobbyDuration: 60,
   };
   const server = ServerService.getServer();
   if (server && server.lobbys) {
@@ -44,6 +45,24 @@ LobbyService.getLobbyById = (id) => {
     }
   }
   return lobby;
+};
+
+LobbyService.setLobbyDuration = (id, newDuration) => {
+  const lobby = LobbyService.getLobbyById(id);
+  if (lobby === null) {
+    return null;
+  }
+
+  lobby.lobbyDuration = newDuration;
+};
+
+LobbyService.getLobbyDuration = (id) => {
+  const lobby = LobbyService.getLobbyById(id);
+  if (lobby === null) {
+    return null;
+  }
+
+  return lobby.lobbyDuration;
 };
 
 LobbyService.addPlayerToRoom = (id, name) => {

@@ -12,8 +12,9 @@ const DrawingScreen = (props) => {
   const socket = useContext(SocketContext);
   const [prompt, setPrompt] = useState("");
   const history = useHistory();
-  const [second, setSecond] = useState(30);
+  const [second, setSecond] = useState(60);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [maxSecond, setMaxSecond] = useState(60);
   const canvasRef = useRef();
   const { id } = useParams();
 
@@ -30,9 +31,11 @@ const DrawingScreen = (props) => {
   useEffect(() => {
     let isMounted = true;
     if (socket && isMounted) {
-      socket.on("timerUpdate", (second) => {
+      socket.on("timerUpdate", (secondData) => {
+        const { second, maxSecond } = secondData;
         if (isMounted) {
           setSecond(second);
+          setMaxSecond(maxSecond);
         }
       });
       socket.on("timerDone", () => {
@@ -84,7 +87,7 @@ const DrawingScreen = (props) => {
     <FullWidthContainer>
       <DrawingContainer>
         <Title style={{ marginTop: 0 }}>{prompt || "LOADING PROMPT..."}</Title>
-        <Progress value={second} max={60} />
+        <Progress value={second} max={maxSecond} />
         {!isSubmitted && (
           <>
             <Canvas ref={canvasRef} />

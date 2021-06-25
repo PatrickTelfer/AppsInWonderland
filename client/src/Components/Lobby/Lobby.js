@@ -9,13 +9,15 @@ import { Title, SubTitle } from "../Common/Text";
 import { SocketContext } from "../../Context/socket";
 
 const Lobby = (props) => {
+  const [players, setPlayers] = useState([]);
   const [joined, setJoined] = useState(false);
+  const [lobbyDuration, setLobbyDuration] = useState(60);
+
   const serverData = props.location.state;
   const serverCode = serverData.code;
   const name = serverData.name;
   const isHost = serverData.isHost;
   const socket = useContext(SocketContext);
-  const [players, setPlayers] = useState([]);
   const history = useHistory();
   const canvasRef = useRef();
 
@@ -53,7 +55,10 @@ const Lobby = (props) => {
 
   const startGame = () => {
     if (socket) {
-      socket.emit("start");
+      const startData = {
+        lobbyDuration,
+      };
+      socket.emit("start", startData);
     }
   };
 
@@ -67,6 +72,31 @@ const Lobby = (props) => {
         </Code>
         <PlayerList players={players} />
         <SubTitle>Player Count: {players && players.length}</SubTitle>
+
+        {isHost && (
+          <div
+            style={{
+              display: "flex",
+              marginTop: "auto",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            <label htmlFor="timer">Set Round Duration</label>
+            <input
+              type="range"
+              id="timer"
+              min="5"
+              max="120"
+              step="5"
+              value={lobbyDuration}
+              onChange={(e) => {
+                setLobbyDuration(e.target.value);
+              }}
+            />
+            <div>{lobbyDuration} seconds</div>
+          </div>
+        )}
 
         <Button
           style={{ marginTop: "auto" }}

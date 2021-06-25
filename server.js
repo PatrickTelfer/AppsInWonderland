@@ -28,26 +28,36 @@ io.on("connection", (socket) => {
   });
 
   // TIMER EVENTS
-  socket.on("start", () => {
+  socket.on("start", (startData) => {
+    const { lobbyDuration } = startData;
+    LobbyService.setLobbyDuration(playerRoom, lobbyDuration);
+
     console.log("STARTING GAME", playerRoom);
     io.to(playerRoom).emit("hostStartedGame");
-    let second = 60;
+    let second = lobbyDuration;
     const intervalObj = setInterval(() => {
-      io.to(playerRoom).emit("timerUpdate", second);
+      io.to(playerRoom).emit("timerUpdateStart", {
+        maxSecond: lobbyDuration,
+        second,
+      });
       second--;
     }, 1000);
 
     setTimeout(() => {
       clearInterval(intervalObj);
-      io.to(playerRoom).emit("timerDone");
+      io.to(playerRoom).emit("timerDoneStart");
       LobbyService.setTotalRounds(playerRoom);
     }, second * 1000 + 2000);
   });
 
   socket.on("startTimer", () => {
-    let second = 60;
+    const maxSecond = LobbyService.getLobbyDuration(playerRoom);
+    let second = maxSecond;
     const intervalObj = setInterval(() => {
-      io.to(playerRoom).emit("timerUpdate", second);
+      io.to(playerRoom).emit("timerUpdate", {
+        maxSecond,
+        second,
+      });
       second--;
     }, 1000);
 

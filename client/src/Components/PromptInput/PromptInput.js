@@ -17,6 +17,7 @@ const PromptInput = (props) => {
   const [second, setSecond] = useState(30);
   const [submitted, setSubmitted] = useState(false);
   const [prompt, setPrompt] = useState("");
+  const [maxSecond, setMaxSecond] = useState(60);
   const history = useHistory();
   const [receivedTimer, setReceivedTimer] = useState(false);
   const { id } = useParams();
@@ -24,15 +25,17 @@ const PromptInput = (props) => {
   useEffect(() => {
     let isMounted = true;
     if (socket) {
-      socket.on("timerUpdate", (second) => {
+      socket.on("timerUpdateStart", (secondData) => {
         if (isMounted) {
+          const { second, maxSecond } = secondData;
           setSecond(second);
+          setMaxSecond(maxSecond);
           if (!receivedTimer) {
             setReceivedTimer(true);
           }
         }
       });
-      socket.on("timerDone", () => {
+      socket.on("timerDoneStart", () => {
         if (isMounted) {
           if (!submitted && prompt !== "") {
             socket.emit("submitPrompt", prompt);
@@ -46,8 +49,8 @@ const PromptInput = (props) => {
     }
     return () => {
       isMounted = false;
-      socket.removeAllListeners("timerDone");
-      socket.removeAllListeners("timerUpdate");
+      socket.removeAllListeners("timerDoneStart");
+      socket.removeAllListeners("timerUpdateStart");
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [history, socket, submitted, prompt]);
@@ -57,7 +60,7 @@ const PromptInput = (props) => {
         <Title>Enter a drawing prompt</Title>
         <Spinning src={thinking} alt="loading..." />
 
-        {receivedTimer && <Progress value={second} max={60} />}
+        {receivedTimer && <Progress value={second} max={maxSecond} />}
         {!submitted && (
           <>
             <StyledInput
