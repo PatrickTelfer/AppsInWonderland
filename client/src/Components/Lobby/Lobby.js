@@ -11,8 +11,6 @@ import { SocketContext } from "../../Context/socket";
 const Lobby = (props) => {
   const [joined, setJoined] = useState(false);
   const serverData = props.location.state;
-  console.log(props);
-  // const socket = props.socket;
   const serverCode = serverData.code;
   const name = serverData.name;
   const isHost = serverData.isHost;
@@ -39,13 +37,11 @@ const Lobby = (props) => {
       }
       socket.on("playerJoined", (players) => {
         if (isMounted) {
-          console.log(players);
           setPlayers(players);
         }
       });
 
       socket.on("hostStartedGame", () => {
-        console.log("HERE", name);
         isMounted = false;
         history.replace({
           pathname: "/Prompt/" + serverData.code,

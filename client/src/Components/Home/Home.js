@@ -22,7 +22,6 @@ const handleCreateClick = async (name, setError) => {
 
 const handleJoinClick = async (code, setError) => {
   const res = await fetch("/api/lobby/" + code);
-  console.log(res.status);
   if (res.status === 404) {
     setError("This room does not exist");
 
@@ -63,7 +62,6 @@ const Home = ({ socket }) => {
               disabled={code === ""}
               onClick={async () => {
                 const lobbyData = await handleJoinClick(code, setError);
-                console.log(lobbyData);
                 if (lobbyData !== null) {
                   lobbyData.isHost = false;
                   history.push({
