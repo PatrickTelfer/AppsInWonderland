@@ -11,6 +11,7 @@ const VotingCard = ({
   setShowWeird,
   showCreative,
   setShowCreative,
+  showName,
 }) => {
   const socket = useContext(SocketContext);
 
@@ -18,7 +19,7 @@ const VotingCard = ({
     <CardContainer>
       <UpperContainer>
         <StyledImg alt="test" src={src} />
-        <Name>Drawing by {name}</Name>
+        {showName && <Name>Drawing by {name}</Name>}
       </UpperContainer>
       <BottomContainer>
         {showBest && (

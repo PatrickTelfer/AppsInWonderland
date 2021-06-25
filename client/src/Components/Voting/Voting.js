@@ -74,6 +74,7 @@ const Voting = (props) => {
                 setShowCreative={setShowCreative}
                 showWeird={showWeird}
                 setShowWeird={setShowWeird}
+                showName={false}
               />
             );
           })}
