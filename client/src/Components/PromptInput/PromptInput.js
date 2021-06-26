@@ -42,7 +42,7 @@ const PromptInput = (props) => {
           }
           history.replace({
             pathname: "/DrawingScreen/" + id,
-            state: { name },
+            state: { ...state, name },
           });
         }
       });

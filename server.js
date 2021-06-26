@@ -67,6 +67,14 @@ io.on("connection", (socket) => {
     }, second * 1000 + 2000);
   });
 
+  socket.on("hostStartingNextRound", () => {
+    io.to(playerRoom).emit("hostStartedNextRound");
+  });
+
+  socket.on("hostEndingGame", () => {
+    io.to(playerRoom).emit("hostEndedGame");
+  });
+
   // PROMPT EVENTS
   socket.on("submitPrompt", (prompt) => {
     LobbyService.addPlayerPrompt(playerRoom, prompt);

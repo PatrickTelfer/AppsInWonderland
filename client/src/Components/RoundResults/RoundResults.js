@@ -4,6 +4,8 @@ import { Title } from "../Common/Text";
 import styled from "styled-components";
 import VotingCard from "../Voting/VotingCard";
 import { SocketContext } from "../../Context/socket";
+import { Button } from "../Common/Button";
+import { useHistory, useParams, withRouter } from "react-router-dom";
 
 function mySort(a, b) {
   if (a.value > b.value) {
@@ -52,11 +54,24 @@ function mergeArrs(arr1, arr2, arr3) {
   return newArr;
 }
 
-const RoundResults = () => {
+const RoundResults = (props) => {
   const [players, setPlayers] = useState([]);
   const [serverPlayers, setServerPlayers] = useState([]);
+  const [buttonText, setButtonText] = useState("Next Round");
+
+  const history = useHistory();
+  const { id } = useParams();
 
   const socket = useContext(SocketContext);
+  const state = props.location.state;
+  const { isHost } = state;
+  const { name, isLast } = state;
+
+  useEffect(() => {
+    if (isLast) {
+      setButtonText("Go To Final Results");
+    }
+  }, [isLast]);
 
   useEffect(() => {
     let isMounted = true;
@@ -68,6 +83,20 @@ const RoundResults = () => {
         if (isMounted) {
           setServerPlayers(votes);
         }
+      });
+
+      socket.on("hostStartedNextRound", () => {
+        history.replace({
+          pathname: "/DrawingScreen/" + id,
+          state: { ...state, name },
+        });
+      });
+
+      socket.on("hostEndedGame", () => {
+        history.replace({
+          pathname: "/Results/" + id,
+          state: { ...state, name },
+        });
       });
     }
 
@@ -116,7 +145,24 @@ const RoundResults = () => {
   return (
     <FullWidthContainer>
       <StyledContaier>
-        <Title>Round Results</Title>
+        <TopContainer>
+          <Title style={{ margin: 0 }}>Round Results</Title>
+
+          {isHost && (
+            <NextButton
+              onClick={() => {
+                if (isLast) {
+                  socket.emit("hostEndingGame");
+                } else {
+                  socket.emit("hostStartingNextRound");
+                }
+              }}
+            >
+              {buttonText}
+            </NextButton>
+          )}
+        </TopContainer>
+
         <VoteContainer>
           {players.map((player, index) => {
             return (
@@ -150,8 +196,23 @@ const VoteContainer = styled.div`
   margin: 1em;
 `;
 
+const TopContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  padding: 1em;
+  width: 100%;
+`;
+const NextButton = styled(Button)`
+  height: 50px;
+  margin: 0;
+  padding: 0;
+  margin: 0.5em;
+`;
+
 const StyledContaier = styled(Container)`
   height: auto;
 `;
 
-export default RoundResults;
+export default withRouter(RoundResults);

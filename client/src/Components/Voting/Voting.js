@@ -37,7 +37,7 @@ const Voting = (props) => {
         if (isMounted) {
           history.replace({
             pathname: "/RoundResults/" + id,
-            state: { name },
+            state: { ...state, name, isLast: false },
           });
         }
       });
@@ -46,7 +46,7 @@ const Voting = (props) => {
         if (isMounted) {
           history.replace({
             pathname: "/RoundResults/" + id,
-            state: { name },
+            state: { ...state, name, isLast: true },
           });
         }
       });
