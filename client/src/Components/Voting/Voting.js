@@ -36,7 +36,7 @@ const Voting = (props) => {
       socket.on("lastVoteDraw", () => {
         if (isMounted) {
           history.replace({
-            pathname: "/DrawingScreen/" + id,
+            pathname: "/RoundResults/" + id,
             state: { name },
           });
         }
@@ -45,7 +45,7 @@ const Voting = (props) => {
       socket.on("lastVoteEnd", () => {
         if (isMounted) {
           history.replace({
-            pathname: "/Results/" + id,
+            pathname: "/RoundResults/" + id,
             state: { name },
           });
         }

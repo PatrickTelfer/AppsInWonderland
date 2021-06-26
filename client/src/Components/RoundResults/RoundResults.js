@@ -1,67 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { Container, FullWidthContainer } from "../Common/Container";
 import { Title } from "../Common/Text";
 import styled from "styled-components";
 import VotingCard from "../Voting/VotingCard";
-
-const testData = [
-  {
-    name: "a",
-    votes: {
-      creative: 1,
-      best: 1,
-      weird: 1,
-    },
-    currentDrawing: "https://dummyimage.com/300x420/f2f2f2/000",
-    roundVotes: {
-      creative: 1,
-      best: 3,
-      weird: 1,
-    },
-  },
-  {
-    name: "b",
-    votes: {
-      creative: 1,
-      best: 1,
-      weird: 1,
-    },
-    currentDrawing: "https://dummyimage.com/300x420/f2f2f2/000",
-    roundVotes: {
-      creative: 2,
-      best: 1,
-      weird: 1,
-    },
-  },
-  {
-    name: "c",
-    votes: {
-      creative: 1,
-      best: 1,
-      weird: 1,
-    },
-    currentDrawing: "https://dummyimage.com/300x420/f2f2f2/000",
-    roundVotes: {
-      creative: 2,
-      best: 3,
-      weird: 1,
-    },
-  },
-  {
-    name: "d",
-    votes: {
-      creative: 1,
-      best: 1,
-      weird: 1,
-    },
-    currentDrawing: "https://dummyimage.com/300x420/f2f2f2/000",
-    roundVotes: {
-      creative: 0,
-      best: 0,
-      weird: 1,
-    },
-  },
-];
+import { SocketContext } from "../../Context/socket";
 
 function mySort(a, b) {
   if (a.value > b.value) {
@@ -112,9 +54,33 @@ function mergeArrs(arr1, arr2, arr3) {
 
 const RoundResults = () => {
   const [players, setPlayers] = useState([]);
+  const [serverPlayers, setServerPlayers] = useState([]);
+
+  const socket = useContext(SocketContext);
 
   useEffect(() => {
-    const arr1 = testData.map((data) => {
+    let isMounted = true;
+
+    if (socket && isMounted) {
+      socket.emit("requestingVotes");
+
+      socket.on("sendingVotes", (votes) => {
+        if (isMounted) {
+          setServerPlayers(votes);
+        }
+      });
+    }
+
+    return () => {
+      isMounted = false;
+    };
+  }, [socket]);
+
+  useEffect(() => {
+    if (serverPlayers.length === 0) {
+      return;
+    }
+    const arr1 = serverPlayers.map((data) => {
       return {
         name: data.name,
         value: data.roundVotes.best,
@@ -122,24 +88,22 @@ const RoundResults = () => {
       };
     });
 
-    const arr2 = testData.map((data) => {
+    const arr2 = serverPlayers.map((data) => {
       return {
         name: data.name,
         value: data.roundVotes.creative,
       };
     });
 
-    const arr3 = testData.map((data) => {
+    const arr3 = serverPlayers.map((data) => {
       return {
         name: data.name,
         value: data.roundVotes.weird,
       };
     });
     arr1.sort(mySort);
-    // setBestArray(arr1);
 
     arr2.sort(mySort);
-    // setCreativeArray(arr2);
 
     arr3.sort(mySort);
     setTopPlayers(arr1, "isBest");
@@ -147,8 +111,7 @@ const RoundResults = () => {
     setTopPlayers(arr3, "isWeird");
     const newArr = mergeArrs(arr1, arr2, arr3);
     setPlayers(newArr);
-    // setWeirdArray(arr3);
-  }, [testData]);
+  }, [serverPlayers]);
 
   return (
     <FullWidthContainer>
