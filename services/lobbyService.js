@@ -9,6 +9,12 @@ function Player(name) {
     best: 0,
     weird: 0,
   };
+  this.currentDrawing = {};
+  this.roundVotes = {
+    creative: 0,
+    best: 0,
+    weird: 0,
+  };
 }
 
 LobbyService.createLobby = (hostName) => {
@@ -20,7 +26,6 @@ LobbyService.createLobby = (hostName) => {
     images: [],
     currentPrompt: 0,
     rounds: 0,
-    votes: [],
     roundVoteCount: 0,
     lobbyDuration: 60,
   };
@@ -142,11 +147,19 @@ LobbyService.setTotalRounds = (id) => {
   }
 };
 
-LobbyService.addImageToServer = (id, imageData) => {
+LobbyService.addImageToServer = (id, imageData, playerName) => {
   const lobby = LobbyService.getLobbyById(id);
 
   if (!lobby || !lobby.images) {
     return null;
+  }
+
+  const players = lobby.players;
+
+  for (let i = 0; i < players.length; i++) {
+    if (players[i].name === playerName) {
+      players[i].currentDrawing = imageData.dataURL;
+    }
   }
 
   lobby.images.push(imageData);
@@ -181,6 +194,7 @@ LobbyService.getRandomPrompt = (id) => {
 function checkVotes(lobby) {
   const imageCount = lobby.images.length;
 
+  // clear round data
   if (lobby.roundVoteCount >= imageCount * 3) {
     lobby.roundVoteCount = 0;
     lobby.currentPrompt++;
@@ -199,6 +213,16 @@ LobbyService.voteForPlayer = (id, votingData) => {
     return false;
   }
 
+  if (lobby.roundVoteCount === 0) {
+    const players = lobby.players;
+    for (let i = 0; i < players.length; i++) {
+      const player = players[i];
+      player.roundVotes.best = 0;
+      player.roundVotes.creative = 0;
+      player.roundVotes.weird = 0;
+    }
+  }
+
   lobby.roundVoteCount++;
 
   const players = lobby.players;
@@ -208,10 +232,13 @@ LobbyService.voteForPlayer = (id, votingData) => {
     if (player.name === name) {
       if (category === "best") {
         player.votes.best += 1;
+        player.roundVotes.best += 1;
       } else if (category === "creative") {
         player.votes.creative += 1;
+        player.roundVotes.creative += 1;
       } else if (category === "weird") {
         player.votes.weird += 1;
+        player.roundVotes.weird += 1;
       }
 
       break;

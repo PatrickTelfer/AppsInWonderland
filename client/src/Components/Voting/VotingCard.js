@@ -12,6 +12,9 @@ const VotingCard = ({
   showCreative,
   setShowCreative,
   showName,
+  isBest,
+  isCreative,
+  isWeird,
 }) => {
   const socket = useContext(SocketContext);
 
@@ -19,6 +22,20 @@ const VotingCard = ({
     <CardContainer>
       <UpperContainer>
         <StyledImg alt="test" src={src} />
+        <div style={{ margin: "0.5em" }}>
+          {isBest && <VotingTile>🥇 Best Drawing 🥇</VotingTile>}
+          {isCreative && (
+            <VotingTile style={{ backgroundColor: "#7CE3F1" }}>
+              🎨 Most Creative 🎨
+            </VotingTile>
+          )}
+          {isWeird && (
+            <VotingTile style={{ backgroundColor: "#FD7070" }}>
+              🤔 ??? 🤔
+            </VotingTile>
+          )}
+        </div>
+
         {showName && <Name>Drawing by {name}</Name>}
       </UpperContainer>
       <BottomContainer>
@@ -76,6 +93,15 @@ const BottomContainer = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+`;
+
+const VotingTile = styled.div`
+  background: #67e9a3;
+  border-radius: 4px;
+  margin-bottom: 0.4em;
+  padding: 0.5em;
+  border: none;
+  text-align: center;
 `;
 
 const VotingButton = styled.button`

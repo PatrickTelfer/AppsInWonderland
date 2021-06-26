@@ -83,7 +83,7 @@ io.on("connection", (socket) => {
 
   // IMAGE EVENTS
   socket.on("submittingImage", (imageData) => {
-    LobbyService.addImageToServer(playerRoom, imageData);
+    LobbyService.addImageToServer(playerRoom, imageData, playerName);
   });
 
   socket.on("requestingImages", () => {
