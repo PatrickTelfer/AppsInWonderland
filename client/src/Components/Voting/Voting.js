@@ -54,6 +54,9 @@ const Voting = (props) => {
 
     return () => {
       isMounted = false;
+      socket.removeAllListeners("sendingImages");
+      socket.removeAllListeners("lastVoteDraw");
+      socket.removeAllListeners("lastVoteEnd");
     };
   }, []);
 
