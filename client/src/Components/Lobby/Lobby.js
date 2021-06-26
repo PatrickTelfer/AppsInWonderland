@@ -13,10 +13,10 @@ const Lobby = (props) => {
   const [joined, setJoined] = useState(false);
   const [lobbyDuration, setLobbyDuration] = useState(60);
 
-  const serverData = props.location.state;
-  const serverCode = serverData.code;
-  const name = serverData.name;
-  const isHost = serverData.isHost;
+  const state = props.location.state;
+  const serverCode = state.code;
+  const name = state.name;
+  const isHost = state.isHost;
   const socket = useContext(SocketContext);
   const history = useHistory();
   const canvasRef = useRef();
@@ -46,12 +46,12 @@ const Lobby = (props) => {
       socket.on("hostStartedGame", () => {
         isMounted = false;
         history.replace({
-          pathname: "/Prompt/" + serverData.code,
-          state: { ...serverData, name },
+          pathname: "/Prompt/" + serverCode,
+          state: { ...state, name },
         });
       });
     }
-  }, [socket, joined, name, serverCode, history, serverData]);
+  }, [socket, joined, name, serverCode, history, state]);
 
   const startGame = () => {
     if (socket) {
@@ -120,10 +120,12 @@ const Code = styled(SubTitle)`
 
 const LobbyContainer = styled(Container)`
   max-width: 500px;
+  min-width: 300px;
+  margin: 0.5em;
 `;
 
 const DrawingContainer = styled(Container)`
-  margin: 20px;
+  margin: 0.5em;
   max-width: 500px;
   justify-content: center;
   @media (max-width: 768px) {

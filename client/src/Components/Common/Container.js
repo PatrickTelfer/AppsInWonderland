@@ -26,4 +26,5 @@ export const Container = styled.div`
   flex-direction: column;
   align-items: center;
   border-radius: 25px;
+  box-sizing: border-box;
 `;
