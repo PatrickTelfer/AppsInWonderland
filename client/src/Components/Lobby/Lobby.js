@@ -1,19 +1,13 @@
 import React, { useContext, useEffect, useState, useRef } from "react";
-import { FullWidthContainer, Container } from "../Common/Container";
-import styled from "styled-components";
 import PlayerList from "./PlayerList";
 import Canvas from "../Canvas/Canvas";
 import { useHistory, withRouter } from "react-router";
-import { Title, SubTitle } from "../Common/Text";
 import { SocketContext } from "../../Context/socket";
 import {
   Center,
   Flex,
   Text,
   FormControl,
-  FormLabel,
-  FormErrorMessage,
-  Input,
   Button,
   Code,
   Slider,
