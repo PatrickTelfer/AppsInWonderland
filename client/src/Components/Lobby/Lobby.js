@@ -15,6 +15,7 @@ import {
   SliderFilledTrack,
   SliderThumb,
   Box,
+  Heading,
 } from "@chakra-ui/react";
 
 const Lobby = (props) => {
@@ -83,7 +84,7 @@ const Lobby = (props) => {
         minW="sm"
         alignItems="center"
       >
-        <Text fontSize="xl">WELCOME TO THE LOBBY</Text>
+        <Heading textAlign="center">WELCOME TO THE LOBBY</Heading>
         <Text fontSize="lg">
           🔥 Join with code <Code colorScheme="red">{serverCode}</Code> 🔥
         </Text>

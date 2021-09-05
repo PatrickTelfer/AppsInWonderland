@@ -1,13 +1,20 @@
 import React, { useContext, useEffect, useState } from "react";
-import styled from "styled-components";
-import { Container, FullWidthContainer } from "../Common/Container";
-import { Input } from "../Common/Input";
-import { Title, SubTitle } from "../Common/Text";
-import { Button } from "../Common/Button";
-import thinking from "../../Ressources/thinking.gif";
 import { SocketContext } from "../../Context/socket";
 import { useHistory, useParams, withRouter } from "react-router";
-import { Progress } from "../Common/Progress";
+import {
+  Center,
+  Flex,
+  Text,
+  Heading,
+  FormControl,
+  Button,
+  FormLabel,
+  Input,
+  CircularProgress,
+  CircularProgressLabel,
+  Alert,
+  AlertIcon,
+} from "@chakra-ui/react";
 
 const PromptInput = (props) => {
   const state = props.location.state;
@@ -55,21 +62,40 @@ const PromptInput = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [history, socket, submitted, prompt]);
   return (
-    <FullWidthContainer>
-      <Container>
-        <Title>Enter a drawing prompt</Title>
-        <Spinning src={thinking} alt="loading..." />
+    <Flex p="4" m="2" minH="xl" shadow="md" flexDirection="column">
+      <Heading textAlign="center">Enter a drawing prompt</Heading>
+      <Text textAlign="center" fontSize="sm" mt={2}>
+        Drawing prompts will then be randomly selected to be drawn by the other
+        players
+      </Text>
 
-        {receivedTimer && <Progress value={second} max={maxSecond} />}
-        {!submitted && (
-          <>
-            <StyledInput
-              placeholder="Input a suggestion!"
-              onChange={(e) => {
-                setPrompt(e.target.value);
-              }}
-            ></StyledInput>
+      {receivedTimer && (
+        <Center>
+          <CircularProgress value={second} max={maxSecond} mt={4}>
+            <CircularProgressLabel>{second}</CircularProgressLabel>
+          </CircularProgress>
+        </Center>
+      )}
+      {!submitted && (
+        <>
+          <Center mt={8}>
+            <FormControl isRequired w="lg">
+              <FormLabel>Prompt</FormLabel>
+              <Input
+                focusBorderColor="purple.600"
+                placeholder="Input a suggestion!"
+                variant="flushed"
+                onChange={(e) => {
+                  setPrompt(e.target.value);
+                }}
+              />
+            </FormControl>
+          </Center>
+          <Center mt={4}>
             <Button
+              w="lg"
+              variant="outline"
+              colorScheme="purple"
               onClick={() => {
                 if (prompt !== "") {
                   setSubmitted(true);
@@ -79,23 +105,19 @@ const PromptInput = (props) => {
             >
               Submit
             </Button>
-          </>
-        )}
-        {submitted && (
-          <SubTitle style={{ marginTop: "auto" }}>
+          </Center>
+        </>
+      )}
+      {submitted && (
+        <Center mt="auto">
+          <Alert status="success">
+            <AlertIcon />
             Thank your for your submission. Waiting for others to submit
-          </SubTitle>
-        )}
-      </Container>
-    </FullWidthContainer>
+          </Alert>
+        </Center>
+      )}
+    </Flex>
   );
 };
 
-const StyledInput = styled(Input)`
-  margin-top: auto;
-`;
-
-const Spinning = styled.img`
-  max-width: 100px;
-`;
 export default withRouter(PromptInput);

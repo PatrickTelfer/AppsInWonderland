@@ -9,6 +9,7 @@ import {
   FormErrorMessage,
   Input,
   Button,
+  Heading,
 } from "@chakra-ui/react";
 
 const handleCreateClick = async (name, setError) => {
@@ -46,7 +47,7 @@ const Home = ({ socket }) => {
   return (
     <Flex p="4" m="2" minH="lg" shadow="lg" flexDirection="column">
       <Center>
-        <Text fontSize="xl">APPS IN WONDERLAND 🐇</Text>
+        <Heading textAlign="center">APPS IN WONDERLAND</Heading>
       </Center>
       <Center mt={4}>
         <FormControl isRequired w="lg">
