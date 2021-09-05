@@ -2,6 +2,7 @@ import React, { forwardRef, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { FaEraser, FaPencilAlt, FaTrash } from "react-icons/fa";
 import { Button } from "../Common/Button";
+import { IconButton, HStack, Flex } from "@chakra-ui/react";
 
 const Canvas = forwardRef((props, ref) => {
   if (!ref) {
@@ -15,33 +16,13 @@ const Canvas = forwardRef((props, ref) => {
   const [currentX, setCurrentX] = useState(0);
   const [currentY, setCurrentY] = useState(0);
   const [isDrawing, setIsDrawing] = useState(false);
-  const [currentWidth, setCurrentWidth] = useState(0);
   const [isDrawingToolSelected, setIsDrawingToolSelected] = useState(true);
   const [currentColor, setCurrentColor] = useState();
 
-  //   useEffect(() => {
-  //     const onResize = (e) => {
-  //       const height = containerRef.current.offsetHeight;
-  //       const width = containerRef.current.offsetWidth;
-  //       if (Math.abs(width - currentWidth) > threshHold) {
-  //         ctx.canvas.width = width - 50;
-  //         ctx.canvas.height = height - 50;
-  //         console.log("hi");
-  //         setCurrentWidth(width);
-  //       }
-  //     };
-  //     window.addEventListener("resize", onResize, false);
-  //   }, [ctx, currentWidth, containerRef]);
-
   useEffect(() => {
     const canvas = canvasRef.current;
-    // const height = containerRef.current.offsetHeight;
-    // const width = containerRef.current.offsetWidth;
     let ctx = canvas.getContext("2d");
     setCtx(ctx);
-    // setCurrentWidth(width);
-    // ctx.canvas.width = width - 50;
-    // ctx.canvas.height = height - 150;
     ctx.canvas.width = 300;
     ctx.canvas.height = 420;
     setCurrentColor("#000000");
@@ -49,10 +30,10 @@ const Canvas = forwardRef((props, ref) => {
 
   const drawLine = function (x, y, color) {
     ctx.strokeStyle = currentColor;
-    ctx.lineWidth = 1;
+    ctx.lineWidth = 3;
     if (!isDrawingToolSelected) {
       ctx.strokeStyle = "#f2f2f2";
-      ctx.lineWidth = 20;
+      ctx.lineWidth = 30;
     }
     ctx.beginPath();
     ctx.moveTo(currentX, currentY);
@@ -65,8 +46,41 @@ const Canvas = forwardRef((props, ref) => {
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
   };
   return (
-    <CanvasContainer ref={containerRef}>
-      <Toolbar>
+    <Flex ref={containerRef} p="2" flexDirection="column" alignItems="center">
+      <Flex
+        bg="purple.100"
+        p="2"
+        borderRadius="lg"
+        justifyContent="space-around"
+        width="3xs"
+        mb={4}
+      >
+        <IconButton
+          colorScheme="purple"
+          disabled={!isDrawingToolSelected}
+          aria-label="Eraser"
+          icon={<FaEraser />}
+          onClick={() => {
+            setIsDrawingToolSelected(!isDrawingToolSelected);
+          }}
+        ></IconButton>
+        <IconButton
+          colorScheme="purple"
+          aria-label="Draw"
+          disabled={isDrawingToolSelected}
+          icon={<FaPencilAlt />}
+          onClick={() => {
+            setIsDrawingToolSelected(!isDrawingToolSelected);
+          }}
+        ></IconButton>
+        <IconButton
+          colorScheme="purple"
+          aria-label="Trash"
+          icon={<FaTrash />}
+          onClick={clearCanvas}
+        ></IconButton>
+      </Flex>
+      {/* <Toolbar>
         <ColorPicker
           type="color"
           onChange={(e) => {
@@ -93,8 +107,13 @@ const Canvas = forwardRef((props, ref) => {
         <TrashButton onClick={clearCanvas}>
           <FaTrash />
         </TrashButton>
-      </Toolbar>
-      <StyledCanvas
+      </Toolbar> */}
+      <canvas
+        style={{
+          backgroundColor: "#f2f2f2",
+          touchAction: "none",
+          boxShadow: "2px 2px 2px 1px rgb(0 0 0 / 20%)",
+        }}
         ref={canvasRef}
         onTouchStart={(e) => {
           let coords = convert(e, ctx.canvas);
@@ -115,7 +134,6 @@ const Canvas = forwardRef((props, ref) => {
             return;
           }
           let coords = convert(e, ctx.canvas);
-          // e.preventDefault();
           drawLine(coords.x, coords.y);
           setCurrentX(coords.x);
           setCurrentY(coords.y);
@@ -143,8 +161,8 @@ const Canvas = forwardRef((props, ref) => {
         onMouseLeave={(e) => {
           setIsDrawing(false);
         }}
-      ></StyledCanvas>
-    </CanvasContainer>
+      ></canvas>
+    </Flex>
   );
 });
 
@@ -172,43 +190,6 @@ const StyledCanvas = styled.canvas`
   background-color: #f2f2f2;
   touch-action: none;
   box-shadow: 2px 2px 2px 1px rgb(0 0 0 / 20%);
-`;
-
-const Toolbar = styled.div`
-  display: flex;
-  justify-content: flex-start;
-  width: 50%;
-  border: 2px solid rgba(164, 53, 170, 0.8);
-  margin-bottom: 10px;
-  margin-top: 10px;
-  @media (max-width: 768px) {
-    width: 80%;
-  }
-`;
-
-const ToolbarButton = styled(Button)`
-  width: 55px;
-  height: 55px;
-  margin: 5px;
-  cursor: pointer;
-  background-color: white;
-  padding: 0;
-  font-weight: 1em;
-`;
-
-const TrashButton = styled(ToolbarButton)`
-  &:focus {
-    border: 2px solid rgba(164, 53, 170, 0.8);
-    color: rgba(164, 53, 194, 0.8);
-  }
-`;
-
-const ColorPicker = styled.input`
-  width: 50px;
-  height: 50px;
-  margin: 5px;
-  cursor: pointer;
-  margin-right: auto;
 `;
 
 export default Canvas;

@@ -2,11 +2,26 @@ import React, { useContext, useEffect, useState, useRef } from "react";
 import { FullWidthContainer, Container } from "../Common/Container";
 import styled from "styled-components";
 import PlayerList from "./PlayerList";
-import { Button } from "../Common/Button";
 import Canvas from "../Canvas/Canvas";
 import { useHistory, withRouter } from "react-router";
 import { Title, SubTitle } from "../Common/Text";
 import { SocketContext } from "../../Context/socket";
+import {
+  Center,
+  Flex,
+  Text,
+  FormControl,
+  FormLabel,
+  FormErrorMessage,
+  Input,
+  Button,
+  Code,
+  Slider,
+  SliderTrack,
+  SliderFilledTrack,
+  SliderThumb,
+  Box,
+} from "@chakra-ui/react";
 
 const Lobby = (props) => {
   const [players, setPlayers] = useState([]);
@@ -63,76 +78,79 @@ const Lobby = (props) => {
   };
 
   return (
-    <FullWidthContainer>
-      <LobbyContainer>
-        <Title>WELCOME TO THE LOBBY</Title>
-        <Code>
-          🔥 Join with Code
-          <span style={{ color: "red" }}> {serverCode} </span>🔥
-        </Code>
+    <Flex flexWrap="wrap">
+      <Flex
+        flexGrow="1"
+        p="4"
+        m="2"
+        minH="xl"
+        shadow="md"
+        flexDirection="column"
+        minW="sm"
+        alignItems="center"
+      >
+        <Text fontSize="xl">WELCOME TO THE LOBBY</Text>
+        <Text fontSize="lg">
+          🔥 Join with code <Code colorScheme="red">{serverCode}</Code> 🔥
+        </Text>
         <PlayerList players={players} />
-        <SubTitle>Player Count: {players && players.length}</SubTitle>
-
+        <Text mt={4} fontSize="md">
+          Player Count: {players && players.length}
+        </Text>
         {isHost && (
-          <div
-            style={{
-              display: "flex",
-              marginTop: "auto",
-              flexDirection: "column",
-              alignItems: "center",
-            }}
-          >
-            <label htmlFor="timer">Set Round Duration</label>
-            <input
-              type="range"
-              id="timer"
-              min="5"
-              max="120"
-              step="5"
-              value={lobbyDuration}
-              onChange={(e) => {
-                setLobbyDuration(e.target.value);
-              }}
-            />
-            <div>{lobbyDuration} seconds</div>
-          </div>
+          <Flex flexDirection="column" alignItems="center" marginTop="auto">
+            <FormControl>
+              <Text>Set Round Duration</Text>
+              <Slider
+                defaultValue={lobbyDuration}
+                min={5}
+                max={120}
+                step={5}
+                onChange={(val) => {
+                  setLobbyDuration(val);
+                }}
+                focusThumbOnChange={false}
+              >
+                <SliderTrack bg="purple.100">
+                  <Box position="relative" right={10} />
+                  <SliderFilledTrack bg="purple.600" />
+                </SliderTrack>
+                <SliderThumb boxSize={6} />
+              </Slider>
+              <Center>
+                <Text>{lobbyDuration} seconds</Text>
+              </Center>
+            </FormControl>
+          </Flex>
         )}
-
-        <Button
-          style={{ marginTop: "auto" }}
-          disabled={!isHost}
-          onClick={startGame}
-        >
-          Start
-        </Button>
-      </LobbyContainer>
-      <DrawingContainer>
-        <Canvas ref={canvasRef} />
-      </DrawingContainer>
-    </FullWidthContainer>
+        {isHost && (
+          <Button
+            variant="outline"
+            colorScheme="purple"
+            mt={12}
+            w="2xs"
+            onClick={startGame}
+          >
+            Start
+          </Button>
+        )}
+      </Flex>
+      <Flex
+        flexGrow="1"
+        p="4"
+        m="2"
+        minH="lg"
+        shadow="md"
+        flexDirection="column"
+        minW="sm"
+      >
+        <Center>
+          <Text fontSize="lg">Test the drawing pad!</Text>
+        </Center>
+        <Canvas ref={canvasRef}></Canvas>
+      </Flex>
+    </Flex>
   );
 };
-
-const Code = styled(SubTitle)`
-  outline: red;
-  font-size: 1.25em;
-`;
-
-const LobbyContainer = styled(Container)`
-  max-width: 500px;
-  min-width: 300px;
-  margin: 0.5em;
-`;
-
-const DrawingContainer = styled(Container)`
-  margin: 0.5em;
-  max-width: 500px;
-  justify-content: center;
-  @media (max-width: 768px) {
-    padding: 0;
-    margin-left: 0;
-    margin-right: 0;
-  }
-`;
 
 export default withRouter(Lobby);
