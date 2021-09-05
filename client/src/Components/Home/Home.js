@@ -44,15 +44,7 @@ const Home = ({ socket }) => {
   const [name, setName] = useState(null);
   const history = useHistory();
   return (
-    <Flex
-      backgroundColor="white"
-      p="4"
-      m="2"
-      minH="lg"
-      shadow="lg"
-      spacing={4}
-      flexDirection="column"
-    >
+    <Flex p="4" m="2" minH="lg" shadow="lg" flexDirection="column">
       <Center>
         <Text fontSize="xl">APPS IN WONDERLAND 🐇</Text>
       </Center>
