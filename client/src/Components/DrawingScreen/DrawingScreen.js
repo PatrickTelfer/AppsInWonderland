@@ -1,25 +1,33 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
-import styled from "styled-components";
 import Canvas from "../Canvas/Canvas";
-import { Button } from "../Common/Button";
-import { Container, FullWidthContainer } from "../Common/Container";
-import { Title, SubTitle } from "../Common/Text";
 import { SocketContext } from "../../Context/socket";
 import { useHistory, useParams, withRouter } from "react-router";
-import { Progress } from "../Common/Progress";
+import {
+  Flex,
+  Text,
+  Heading,
+  Button,
+  CircularProgress,
+  CircularProgressLabel,
+  Alert,
+  AlertIcon,
+  Code,
+} from "@chakra-ui/react";
 
 const DrawingScreen = (props) => {
   const socket = useContext(SocketContext);
-  const [prompt, setPrompt] = useState("");
-  const history = useHistory();
-  const [second, setSecond] = useState(60);
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [maxSecond, setMaxSecond] = useState(60);
   const canvasRef = useRef();
+  const history = useHistory();
   const { id } = useParams();
 
+  const [prompt, setPrompt] = useState("");
+  const [second, setSecond] = useState(60);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [receivedTimer, setReceivedTimer] = useState(false);
+  const [maxSecond, setMaxSecond] = useState(60);
+
   const state = props.location.state;
-  const name = state.name;
+  const name = state && state.name;
 
   useEffect(() => {
     if (socket) {
@@ -36,6 +44,9 @@ const DrawingScreen = (props) => {
         if (isMounted) {
           setSecond(second);
           setMaxSecond(maxSecond);
+        }
+        if (!receivedTimer) {
+          setReceivedTimer(true);
         }
       });
       socket.on("timerDone", () => {
@@ -61,7 +72,7 @@ const DrawingScreen = (props) => {
       socket.removeAllListeners("timerDone");
       socket.removeAllListeners("timerUpdate");
     };
-  }, [socket, isSubmitted]);
+  }, [socket, isSubmitted, receivedTimer]);
 
   useEffect(() => {
     let isMounted = true;
@@ -84,47 +95,53 @@ const DrawingScreen = (props) => {
     };
   }, [history, socket, isSubmitted]);
   return (
-    <FullWidthContainer>
-      <DrawingContainer>
-        <Title style={{ marginTop: 0 }}>{prompt || "LOADING PROMPT..."}</Title>
-        <Progress value={second} max={maxSecond} />
-        {!isSubmitted && (
-          <>
-            <Canvas ref={canvasRef} />
-            <StyledButton
-              onClick={() => {
-                setIsSubmitted(true);
-                const dataURL = canvasRef.current.toDataURL();
-                const imageData = {
-                  name,
-                  dataURL,
-                };
-                socket.emit("submittingImage", imageData);
-              }}
-            >
-              Submit
-            </StyledButton>
-          </>
+    <Flex
+      p="4"
+      m="2"
+      minH="xl"
+      shadow="md"
+      flexDirection="column"
+      alignItems="center"
+    >
+      <Heading size="md">The prompt is:</Heading>
+      <Text>
+        <Code>{prompt || "a turtle wearing a top hat"}</Code>
+      </Text>
+
+      <CircularProgress value={second} max={maxSecond} mt={4}>
+        {receivedTimer && (
+          <CircularProgressLabel>{second}</CircularProgressLabel>
         )}
-        {isSubmitted && (
-          <SubTitle>
-            Thank you for your submission. Waiting for others.
-          </SubTitle>
-        )}
-      </DrawingContainer>
-    </FullWidthContainer>
+      </CircularProgress>
+      {!isSubmitted && (
+        <>
+          <Canvas ref={canvasRef} />
+          <Button
+            w="2xs"
+            variant="outline"
+            colorScheme="purple"
+            onClick={() => {
+              setIsSubmitted(true);
+              const dataURL = canvasRef.current.toDataURL();
+              const imageData = {
+                name,
+                dataURL,
+              };
+              socket.emit("submittingImage", imageData);
+            }}
+          >
+            Submit
+          </Button>
+        </>
+      )}
+      {isSubmitted && (
+        <Alert status="success" mt="auto">
+          <AlertIcon />
+          Thank your for your submission. Waiting for others to submit
+        </Alert>
+      )}
+    </Flex>
   );
 };
-
-const DrawingContainer = styled(Container)`
-  padding: 20px;
-  @media (max-width: 768px) {
-    padding: 5px;
-  }
-`;
-
-const StyledButton = styled(Button)`
-  padding: 0;
-`;
 
 export default withRouter(DrawingScreen);
