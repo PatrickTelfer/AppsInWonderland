@@ -43,16 +43,17 @@ const Lobby = (props) => {
   useEffect(() => {
     let isMounted = true;
 
-    if (socket && isMounted && !joined) {
-      if (isMounted) {
-        socket.emit("join", { serverCode, name });
-        setJoined(true);
-      }
+    if (socket && isMounted) {
       socket.on("playerJoined", (players) => {
         if (isMounted) {
           setPlayers(players);
         }
       });
+    }
+
+    if (socket && isMounted && !joined) {
+      socket.emit("join", { serverCode, name });
+      setJoined(true);
     }
 
     if (socket && isMounted) {
