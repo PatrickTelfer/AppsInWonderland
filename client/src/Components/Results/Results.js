@@ -1,8 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
-import styled from "styled-components";
 import { SocketContext } from "../../Context/socket";
-import { Container, FullWidthContainer } from "../Common/Container";
 import Rankings from "./Rankings";
+import { Flex, Heading } from "@chakra-ui/react";
 
 function mySort(a, b) {
   if (a.value > b.value) {
@@ -68,37 +67,23 @@ const Results = () => {
     setWeirdArray(arr3);
   }, [playerData]);
   return (
-    <FullWidthContainer>
-      <ResultsContainer>
-        <RankingsContainer>
-          <Rankings title="Best Drawing" color="#67e9a3" data={bestArray} />
-          <Rankings
-            title="Most Creative"
-            color="#7CE3F1"
-            data={creativeArray}
-          />
-          <Rankings title="???? Drawing" color="#FD7070" data={weirdArray} />
-        </RankingsContainer>
-      </ResultsContainer>
-    </FullWidthContainer>
+    <Flex
+      p="4"
+      m="2"
+      minH="lg"
+      shadow="lg"
+      textAlign="center"
+      flexDirection="column"
+    >
+      <Heading mb={2}>Final Results!</Heading>
+
+      <Flex textAlign="center" flexWrap="wrap">
+        <Rankings title="Best Drawing" color="#67e9a3" data={bestArray} />
+        <Rankings title="Most Creative" color="#7CE3F1" data={creativeArray} />
+        <Rankings title="???? Drawing" color="#FD7070" data={weirdArray} />
+      </Flex>
+    </Flex>
   );
 };
-
-const ResultsContainer = styled(Container)`
-  flex-direction: row;
-  align-items: flex-start;
-  overflow-y: scroll;
-`;
-
-const RankingsContainer = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
-  margin: 10px;
-  flex: 1;
-  font-weight: bold;
-  font-size: 1.5em;
-  text-align: center;
-`;
 
 export default Results;

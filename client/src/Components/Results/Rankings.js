@@ -1,50 +1,36 @@
 import React from "react";
-import styled from "styled-components";
+import { Flex, Text, List, ListItem } from "@chakra-ui/react";
 
 const Rankings = (props) => {
   const { title, data, color } = props;
   return (
-    <RankingsHolder>
-      <StyledTitle style={{ backgroundColor: color }}>{title}</StyledTitle>
+    <Flex
+      minW="xs"
+      flexDirection="column"
+      flex="1"
+      alignItems="center"
+      mt={2}
+      mb={2}
+    >
+      <Text bgColor={color} p="2" borderRadius="md" mb={2} w="80%">
+        {title}
+      </Text>
       <List>
         {data.map((value, index) => {
           return (
             <ListItem key={index}>
               {index === 0 && " 🥇 "}
               {value.name}{" "}
-              <span style={{ color: "red" }}> ({value.value} votes)</span>
+              <Text display="inline" color="red">
+                {" "}
+                ({value.value} votes)
+              </Text>
             </ListItem>
           );
         })}
       </List>
-    </RankingsHolder>
+    </Flex>
   );
 };
-
-const RankingsHolder = styled.div`
-  flex: 1;
-  margin: 5px;
-  display: flex;
-  flex-direction: column;
-  min-width: 250px;
-`;
-
-const List = styled.ul`
-  margin: 0;
-  padding-inline-start: 0;
-`;
-
-const ListItem = styled.li`
-  list-style-type: none;
-`;
-
-const StyledTitle = styled.div`
-  background: #67e9a3;
-  border-radius: 4px;
-  margin-bottom: 0.4em;
-  width: calc(100% - 40px);
-  padding: 0.5em;
-  border: none;
-`;
 
 export default Rankings;
