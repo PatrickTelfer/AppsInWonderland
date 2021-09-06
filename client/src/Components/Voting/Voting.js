@@ -3,7 +3,7 @@ import VotingCard from "./VotingCard";
 import { SocketContext } from "../../Context/socket";
 import { useHistory, useParams } from "react-router";
 import { withRouter } from "react-router-dom";
-import { Flex, Heading } from "@chakra-ui/react";
+import { Flex, Heading, Text, Code } from "@chakra-ui/react";
 
 const Voting = (props) => {
   const socket = useContext(SocketContext);
@@ -18,6 +18,7 @@ const Voting = (props) => {
 
   const state = props.location.state;
   const name = state && state.name;
+  const prompt = state && state.prompt;
 
   useEffect(() => {
     let isMounted = true;
@@ -37,7 +38,7 @@ const Voting = (props) => {
         if (isMounted) {
           history.replace({
             pathname: "/RoundResults/" + id,
-            state: { ...state, name, isLast: false },
+            state: { ...state, name, isLast: false, prompt },
           });
         }
       });
@@ -46,7 +47,7 @@ const Voting = (props) => {
         if (isMounted) {
           history.replace({
             pathname: "/RoundResults/" + id,
-            state: { ...state, name, isLast: true },
+            state: { ...state, name, isLast: true, prompt },
           });
         }
       });
@@ -70,6 +71,9 @@ const Voting = (props) => {
       alignItems="center"
     >
       <Heading>Vote!</Heading>
+      <Text>
+        For the prompt <Code>{prompt}</Code>
+      </Text>
       <Flex justifyContent="center" flexWrap="wrap" margin="1">
         {images.map((value, index) => {
           return (

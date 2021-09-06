@@ -62,7 +62,7 @@ const DrawingScreen = (props) => {
 
           history.replace({
             pathname: "/Voting/" + id,
-            state: { ...state, name },
+            state: { ...state, name, prompt },
           });
         }
       });

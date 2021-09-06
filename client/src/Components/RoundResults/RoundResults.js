@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 import VotingCard from "../Voting/VotingCard";
 import { SocketContext } from "../../Context/socket";
 import { useHistory, useParams, withRouter } from "react-router-dom";
-import { Flex, Heading, Button } from "@chakra-ui/react";
+import { Flex, Heading, Button, Text, Code } from "@chakra-ui/react";
 
 function mySort(a, b) {
   if (a.value > b.value) {
@@ -62,7 +62,7 @@ const RoundResults = (props) => {
   const socket = useContext(SocketContext);
   const state = props.location.state;
   const { isHost } = state;
-  const { name, isLast } = state;
+  const { name, isLast, prompt } = state;
 
   useEffect(() => {
     if (isLast) {
@@ -149,6 +149,9 @@ const RoundResults = (props) => {
       alignItems="center"
     >
       <Heading>Round Results</Heading>
+      <Text mb={2}>
+        For the prompt <Code>{prompt}</Code>
+      </Text>
       {isHost && (
         <Button
           variant="outline"
