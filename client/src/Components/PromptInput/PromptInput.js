@@ -68,14 +68,13 @@ const PromptInput = (props) => {
         Drawing prompts will then be randomly selected to be drawn by the other
         players
       </Text>
-
-      {receivedTimer && (
-        <Center>
-          <CircularProgress value={second} max={maxSecond} mt={4}>
+      <Center>
+        <CircularProgress value={second} max={maxSecond} mt={4}>
+          {receivedTimer && (
             <CircularProgressLabel>{second}</CircularProgressLabel>
-          </CircularProgress>
-        </Center>
-      )}
+          )}
+        </CircularProgress>
+      </Center>
       {!submitted && (
         <>
           <Center mt={8}>
