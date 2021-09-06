@@ -80,34 +80,6 @@ const Canvas = forwardRef((props, ref) => {
           onClick={clearCanvas}
         ></IconButton>
       </Flex>
-      {/* <Toolbar>
-        <ColorPicker
-          type="color"
-          onChange={(e) => {
-            setCurrentColor(e.target.value);
-          }}
-        />
-        <ToolbarButton
-          disabled={!isDrawingToolSelected}
-          onClick={() => {
-            setIsDrawingToolSelected(!isDrawingToolSelected);
-          }}
-        >
-          <FaEraser />
-        </ToolbarButton>
-
-        <ToolbarButton
-          disabled={isDrawingToolSelected}
-          onClick={() => {
-            setIsDrawingToolSelected(!isDrawingToolSelected);
-          }}
-        >
-          <FaPencilAlt />
-        </ToolbarButton>
-        <TrashButton onClick={clearCanvas}>
-          <FaTrash />
-        </TrashButton>
-      </Toolbar> */}
       <canvas
         style={{
           backgroundColor: "#f2f2f2",
