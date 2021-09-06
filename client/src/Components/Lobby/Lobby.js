@@ -43,7 +43,7 @@ const Lobby = (props) => {
   useEffect(() => {
     let isMounted = true;
 
-    if (socket && isMounted) {
+    if (socket && isMounted && !joined) {
       if (isMounted) {
         socket.emit("join", { serverCode, name });
         setJoined(true);
@@ -53,7 +53,9 @@ const Lobby = (props) => {
           setPlayers(players);
         }
       });
+    }
 
+    if (socket && isMounted) {
       socket.on("hostStartedGame", () => {
         isMounted = false;
         history.replace({
@@ -62,6 +64,7 @@ const Lobby = (props) => {
         });
       });
     }
+
     return () => {
       isMounted = false;
       socket.removeAllListeners("playerJoined");
