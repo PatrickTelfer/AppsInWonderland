@@ -61,6 +61,11 @@ const Lobby = (props) => {
         });
       });
     }
+    return () => {
+      isMounted = false;
+      socket.removeAllListeners("playerJoined");
+      socket.removeAllListeners("hostStartedGame");
+    };
   }, [socket, joined, name, serverCode, history, state]);
 
   const startGame = () => {
