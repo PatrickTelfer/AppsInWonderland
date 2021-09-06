@@ -43,7 +43,7 @@ const VotingCard = ({
   const socket = useContext(SocketContext);
 
   return (
-    <Flex flexDirection="column" w="300px">
+    <Flex flexDirection="column" w="300px" m={2}>
       <Flex
         flexDirection="column"
         alignItems="center"

@@ -1,11 +1,8 @@
 import React, { useEffect, useState, useContext } from "react";
-import { Container, FullWidthContainer } from "../Common/Container";
-import { Title } from "../Common/Text";
-import styled from "styled-components";
 import VotingCard from "../Voting/VotingCard";
 import { SocketContext } from "../../Context/socket";
-import { Button } from "../Common/Button";
 import { useHistory, useParams, withRouter } from "react-router-dom";
+import { Flex, Heading, Button } from "@chakra-ui/react";
 
 function mySort(a, b) {
   if (a.value > b.value) {
@@ -143,76 +140,53 @@ const RoundResults = (props) => {
   }, [serverPlayers]);
 
   return (
-    <FullWidthContainer>
-      <StyledContaier>
-        <TopContainer>
-          <Title style={{ margin: 0 }}>Round Results</Title>
-
-          {isHost && (
-            <NextButton
-              onClick={() => {
-                if (isLast) {
-                  socket.emit("hostEndingGame");
-                } else {
-                  socket.emit("hostStartingNextRound");
-                }
-              }}
-            >
-              {buttonText}
-            </NextButton>
-          )}
-        </TopContainer>
-
-        <VoteContainer>
-          {players.map((player, index) => {
-            return (
-              <VotingCard
-                key={index}
-                src={player.img}
-                name={player.name}
-                setShowBest={() => {}}
-                showBest={false}
-                setShowCreative={() => {}}
-                showCreative={false}
-                setShowWeird={() => {}}
-                showWeird={false}
-                showName={true}
-                isBest={player.isBest}
-                isCreative={player.isCreative}
-                isWeird={player.isWeird}
-              />
-            );
-          })}
-        </VoteContainer>
-      </StyledContaier>
-    </FullWidthContainer>
+    <Flex
+      p="4"
+      m="2"
+      minH="xl"
+      shadow="md"
+      flexDirection="column"
+      alignItems="center"
+    >
+      <Heading>Round Results</Heading>
+      {isHost && (
+        <Button
+          variant="outline"
+          colorScheme="purple"
+          onClick={() => {
+            if (isLast) {
+              socket.emit("hostEndingGame");
+            } else {
+              socket.emit("hostStartingNextRound");
+            }
+          }}
+        >
+          {buttonText}
+        </Button>
+      )}
+      <Flex justifyContent="center" flexWrap="wrap" m={2}>
+        {players.map((player, index) => {
+          return (
+            <VotingCard
+              key={index}
+              src={player.img}
+              name={player.name}
+              setShowBest={() => {}}
+              showBest={false}
+              setShowCreative={() => {}}
+              showCreative={false}
+              setShowWeird={() => {}}
+              showWeird={false}
+              showName={true}
+              isBest={player.isBest}
+              isCreative={player.isCreative}
+              isWeird={player.isWeird}
+            />
+          );
+        })}
+      </Flex>
+    </Flex>
   );
 };
-
-const VoteContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  margin: 1em;
-`;
-
-const TopContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  align-items: center;
-  padding: 1em;
-  width: 100%;
-`;
-const NextButton = styled(Button)`
-  height: 50px;
-  margin: 0;
-  padding: 0;
-  margin: 0.5em;
-`;
-
-const StyledContaier = styled(Container)`
-  height: auto;
-`;
 
 export default withRouter(RoundResults);
