@@ -2,9 +2,10 @@
 Multiplayer Drawing Game built using React, Socket.io and Express.js. Play it here at https://appsinwonderland.herokuapp.com/
 
 ## Screenshots
-![chrome_2021-07-30_20-25-50](https://user-images.githubusercontent.com/42557335/127723057-0f39cc14-f405-4126-b74c-3c82cc3de792.png)
-![chrome_2021-07-30_20-28-53](https://user-images.githubusercontent.com/42557335/127723068-c993171a-387d-4e12-a412-51444beed584.png)
-![chrome_2021-07-30_20-30-35](https://user-images.githubusercontent.com/42557335/127723163-94ce1827-ce41-4051-9a0f-69fd34e54780.png)
-![chrome_2021-07-30_20-31-32](https://user-images.githubusercontent.com/42557335/127723048-022e9e11-bd60-489d-a2d0-e26abe049fc7.png)
-![chrome_2021-07-30_20-35-34](https://user-images.githubusercontent.com/42557335/127723189-89ef789e-af90-4705-83db-57d345c9d71c.png)
+![1](https://user-images.githubusercontent.com/42557335/133000698-2e54f8c1-208f-4d25-873f-f7a9078df6b7.png)
+![2](https://user-images.githubusercontent.com/42557335/133000649-0c9031ef-6c54-47cf-aecd-dbaef3b79320.png)
+![3](https://user-images.githubusercontent.com/42557335/133000650-c793c6ae-1b32-44ad-b15d-42f39b18a4e3.png)
+![4](https://user-images.githubusercontent.com/42557335/133000653-6dc2ce2c-b9b0-4905-b310-ae2820ed018c.png)
+![5](https://user-images.githubusercontent.com/42557335/133000657-99c0aa73-daeb-4973-9a35-00f68e233fda.png)
+
 
