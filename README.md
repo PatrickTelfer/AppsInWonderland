@@ -1,5 +1,5 @@
 # AppsInWonderland
-Multiplayer Drawing Game built using React, Socket.io and Express.js. Play it here at https://appsinwonderland.herokuapp.com/
+Multiplayer Drawing Game built using React, Socket.io and Express.js. Play it here at https://appsinwonderland.onrender.com/
 
 ## Screenshots
 ![1](https://user-images.githubusercontent.com/42557335/133000698-2e54f8c1-208f-4d25-873f-f7a9078df6b7.png)
